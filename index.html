@@ -78,13 +78,24 @@
             border-radius: 10px;
             display: block;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+        }
+
+        .other-apps-title {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+            color: #f1c40f;
         }
 
         footer {
             font-size: 12px;
             color: #777;
-            padding-bottom: 20px;
+            padding-top: 20px;
+            padding-bottom: 30px;
         }
     </style>
 </head>
@@ -105,14 +116,21 @@
             <div style="font-size: 20px; font-weight: bold;">0627962633</div>
         </div>
 
-        <a href="https://api.whatsapp.com/send?text=Njoo tucheze Wsendy Pool Master! https://albert199900.github.io/Wsendy-Pool-Master/" class="share-btn">Share on WhatsApp</a>
+        <p style="font-size: 14px; color: #ccc; margin-bottom: 5px;">Kwa mawasiliano zaidi:</p>
+        <a href="https://wa.me/255627962633" class="share-btn" style="background-color: #128C7E;">📱 WhatsApp: 0627962633</a>
+        
+        <a href="https://api.whatsapp.com/send?text=Njoo tucheze Wsendy Pool Master! https://albert199900.github.io/Wsendy-Pool-Master/" class="share-btn">🔗 Share Game WhatsApp</a>
+
+        <div class="other-apps-title">Zingine Kutoka Kwa Albert</div>
+        <a href="https://albert199900.github.io/Sms/" class="share-btn" style="background-color: #6c5ce7;">✉️ Wsendy SMS Pro</a>
+        <a href="https://albert199900.github.io/Wsendy-play-all/" class="share-btn" style="background-color: #ff9f43;">🎵 Wsendy Play All</a>
 
         <footer>© 2024 Wsendy Games | Iringa, Tanzania</footer>
     </div>
 
     <script>
         // --- ADSTERRA POPUNDER LOGIC ---
-        // Hii itafungua tangazo lako mara ya kwanza mtumiaji akigusa game
+        // Inafungua tangazo lako mara ya kwanza mtumiaji akigusa game
         let adServed = false;
         document.getElementById('gameArea').addEventListener('touchstart', function() {
             if (!adServed) {
