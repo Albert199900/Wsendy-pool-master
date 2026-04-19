@@ -2,1217 +2,202 @@
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>WSENDY POOL - PESA KWA MATANGAZO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billiard Pro - Monetag Edition</title>
     <style>
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        body {
-            font-family: 'Arial', 'Roboto', sans-serif;
-            background: #0a0a0a;
-            color: white;
-            text-align: center;
-            margin: 0;
-            padding: 10px;
-            min-height: 100vh;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-        
-        /* Top Navigation */
-        .top-nav {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 10px 5px;
-            background: rgba(0,0,0,0.85);
-            border-bottom: 2px solid #f1c40f;
-            border-radius: 0 0 15px 15px;
-            margin-bottom: 15px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .stat-box {
-            background: #1a1a1a;
-            border: 1px solid #f1c40f;
-            padding: 8px 15px;
-            border-radius: 25px;
-            font-weight: bold;
-            color: #f1c40f;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .stat-box:active {
-            transform: scale(0.95);
-            background: #333;
-        }
-        
-        /* Canvas / Game Area */
-        .game-container {
-            display: flex;
-            justify-content: center;
-            margin: 10px 0;
-        }
-        
-        canvas {
-            width: 100%;
-            max-width: 500px;
-            height: auto;
-            border: 10px solid #5c3a21;
-            border-radius: 15px;
-            background: #1a6b1a;
-            cursor: grab;
-            touch-action: none;
-        }
-        
-        canvas:active {
-            cursor: grabbing;
-        }
-        
-        #powerIndicator {
-            width: 0%;
-            height: 8px;
-            background: linear-gradient(90deg, #2ecc71, #f1c40f, #e74c3c);
-            margin: 8px auto;
-            border-radius: 10px;
-            transition: width 0.05s linear;
-            max-width: 500px;
-        }
-        
-        /* Buttons */
-        .btn-elite {
-            width: 100%;
-            padding: 14px;
-            margin: 6px 0;
-            border: none;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            color: white;
-            font-size: 16px;
-            text-transform: uppercase;
-            transition: 0.1s linear;
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-            box-shadow: 0 5px 0 #b45f1b;
-        }
-        
-        .btn-elite:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #b45f1b;
-        }
-        
-        .btn-green {
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-            box-shadow: 0 5px 0 #1e8449;
-        }
-        
-        .btn-blue {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            box-shadow: 0 5px 0 #1c5980;
-        }
-        
-        .btn-red {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            box-shadow: 0 5px 0 #8b1a1a;
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #555, #333);
-            box-shadow: 0 5px 0 #222;
-        }
-        
-        /* Panels / Overlays */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-        
-        .panel {
-            background: #111;
-            border: 2px solid #f1c40f;
-            border-radius: 25px;
-            width: 90%;
-            max-width: 350px;
-            padding: 20px;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 0 30px rgba(241,196,15,0.3);
-        }
-        
-        /* Shop */
-        .shop-header {
-            display: flex;
-            justify-content: space-between;
-            background: #000;
-            padding: 10px;
-            border-radius: 15px;
-            border: 1px solid #f1c40f;
-            margin-bottom: 15px;
-        }
-        
-        /* Level Grid */
-        .level-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-        }
-        
-        .level-btn {
-            background: #1a1a1a;
-            border: 1px solid #f1c40f;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        
-        /* Ad Buttons Row */
-        .ad-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 15px 0;
-        }
-        
-        .ad-row .btn-elite {
-            flex: 1;
-            min-width: 120px;
-            font-size: 12px;
-            padding: 12px;
-        }
-        
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            z-index: 2000;
-            animation: fadeInUp 0.3s;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-        
-        .toast.error {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-        
-        /* Free Life Button Animation */
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        
-        .free-life-btn {
-            animation: bounce 0.8s infinite;
-            cursor: pointer;
-        }
-        
-        /* Scrollbar */
-        .panel::-webkit-scrollbar {
-            width: 5px;
-        }
-        .panel::-webkit-scrollbar-track {
-            background: #222;
-        }
-        .panel::-webkit-scrollbar-thumb {
-            background: #f1c40f;
-            border-radius: 5px;
-        }
-        
-        input, select {
-            padding: 12px;
-            border-radius: 30px;
-            border: 1px solid #f1c40f;
-            background: #000;
-            color: white;
-            text-align: center;
-            width: 100%;
-            margin: 10px 0;
-        }
+        body { margin: 0; background: #1a1a1a; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        #ui { width: 360px; display: flex; justify-content: space-between; padding: 10px; background: #333; border-radius: 10px 10px 0 0; box-sizing: border-box; border: 2px solid #5d3a1a; }
+        canvas { background: #076324; border: 8px solid #5d3a1a; box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: crosshair; touch-action: none; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); flex-direction: column; justify-content: center; align-items: center; z-index: 100; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        button { padding: 15px 25px; font-size: 18px; cursor: pointer; border: none; border-radius: 50px; margin: 10px; font-weight: bold; width: 250px; transition: 0.2s; }
+        .btn-retry { background: #27ae60; color: white; box-shadow: 0 4px #1e8449; }
+        .btn-life { background: #e67e22; color: white; box-shadow: 0 4px #d35400; }
+        button:active { transform: translateY(4px); box-shadow: none; }
+        h1 { margin: 0; color: #f1c40f; }
     </style>
 </head>
-<body id="gameBody">
+<body>
 
-    <!-- ==================== WELCOME SCREEN ==================== -->
-    <div id="welcomeScreen" class="overlay" style="display: flex;">
-        <div class="panel">
-            <h1 style="color: #f1c40f; margin: 0;">🚗 WSENDY POOL</h1>
-            <p style="font-size: 12px; color: #ccc;">PESA KWA MATANGAZO EDITION</p>
-            <div style="font-size: 60px; margin: 15px 0;">🎱</div>
-            <input type="text" id="playerNameInput" placeholder="Ingiza Jina Lako" value="Bingwa">
-            <button class="btn-elite" onclick="saveName()">🚀 ANZA MCHEZO</button>
-            <button class="btn-elite btn-secondary" onclick="skipName()">⏭️ RUKA</button>
-        </div>
+    <div id="ui">
+        <div>🏆 Lvl: <span id="lvl">1</span></div>
+        <div>💰 <span id="cns">0</span></div>
+        <div>❤️ <span id="lvs">3</span></div>
     </div>
 
-    <!-- ==================== MAIN MENU ==================== -->
-    <div id="gameMenu" class="overlay">
-        <div class="panel">
-            <h2 style="color: #f1c40f;">🏠 MENU KUU</h2>
-            <button class="btn-elite" onclick="startQuestMode()">🏆 QUEST MODE</button>
-            <button class="btn-elite btn-green" onclick="startFreeMode()">💰 FREE MODE</button>
-            <button class="btn-elite btn-blue" onclick="openSpinWithAd()">🎡 LUCKY SPIN (AD)</button>
-            <button class="btn-elite" onclick="openShop()">🛒 SHOP & CLUBS</button>
-            <button class="btn-elite btn-secondary" id="dailyBonusBtn" onclick="watchDailyBonusAd()">🎁 DAILY BONUS (0/3 ADS)</button>
-        </div>
-    </div>
+    <canvas id="poolTable"></canvas>
 
-    <!-- ==================== PAUSE MENU ==================== -->
-    <div id="pauseMenu" class="overlay">
-        <div class="panel">
-            <h2 style="color: #f1c40f;">⏸️ PAUSED</h2>
-            <button class="btn-elite" onclick="togglePause()">▶️ ENDELEA</button>
-            <button class="btn-elite btn-secondary" onclick="skipLevelWithAd()">⏩ RUKA LEVEL (AD)</button>
-            <button class="btn-elite" onclick="openShop(); isPaused=false;">🛒 SHOP</button>
-            <button class="btn-elite btn-secondary" onclick="openLevelMap(); isPaused=false;">🏆 LEVEL MAP</button>
-            <button class="btn-elite btn-red" onclick="restartGame()">🔄 ANZA UPYA</button>
-        </div>
-    </div>
-
-    <!-- ==================== SPIN MODAL ==================== -->
-    <div id="spinModal" class="overlay">
-        <div class="panel">
-            <h2 style="color: #f1c40f;">🎡 LUCKY SPIN</h2>
-            <div style="position: relative; margin: 20px auto;">
-                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 25px solid white; z-index: 10;"></div>
-                <div id="wheel" style="width: 200px; height: 200px; border-radius: 50%; border: 5px solid gold; background: conic-gradient(#e74c3c 0deg 72deg, #3498db 72deg 144deg, #f1c40f 144deg 216deg, #2ecc71 216deg 288deg, #9b59b6 288deg 360deg); transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1); margin: 0 auto;"></div>
-            </div>
-            <button id="spinBtn" class="btn-elite" onclick="performSpin()">🌀 ZUNGUSHA</button>
-            <button class="btn-elite btn-secondary" onclick="closeAllPanels()">FUNGA</button>
-        </div>
-    </div>
-
-    <!-- ==================== SHOP PANEL ==================== -->
-    <div id="shopPanel" class="overlay">
-        <div class="panel">
-            <h2 style="color: #f1c40f;">🛒 SHOP & CLUBS</h2>
-            <div class="shop-header">
-                <span>💰 <span id="shopCoins">600</span></span>
-                <span>❤️ <span id="shopLives">3</span></span>
-            </div>
-            
-            <label for="bgUpload" class="btn-elite btn-secondary">📸 PAKIA PICHA YAKO</label>
-            <input type="file" id="bgUpload" accept="image/*" onchange="handleUpload(event)" style="display: none;">
-            
-            <p style="font-size: 12px; margin: 10px 0 5px;">🏠 MAZINGIRA</p>
-            <button class="btn-elite" onclick="buyBackground('underground', 2000)">🍻 UNDERGROUND (2000💰)</button>
-            <button class="btn-elite" onclick="buyBackground('club', 3000)">🎶 NIGHT CLUB (3000💰)</button>
-            <button class="btn-elite" onclick="buyBackground('neon', 4000)">🟣 NEON CLUB (4000💰)</button>
-            <button class="btn-elite" onclick="buyBackground('villa', 5000)">🏡 VILLA (5000💰)</button>
-            <button class="btn-elite" onclick="buyBackground('yacht', 8000)">🛥️ YACHT (8000💰)</button>
-            
-            <p style="font-size: 12px; margin: 10px 0 5px;">🎨 RANGI ZA MEZA</p>
-            <button class="btn-elite btn-secondary" onclick="buyTableColor('#27ae60', 0)">🟢 KIJANI (BURE)</button>
-            <button class="btn-elite btn-secondary" onclick="buyTableColor('#2980b9', 2000)">🔵 BLUU (2000💰)</button>
-            <button class="btn-elite btn-secondary" onclick="buyTableColor('#c0392b', 5000)">🔴 NYEKUNDU (5000💰)</button>
-            
-            <button class="btn-elite btn-red" onclick="closeAllPanels()">FUNGA</button>
-        </div>
-    </div>
-
-    <!-- ==================== LEVEL MAP ==================== -->
-    <div id="levelMap" class="overlay">
-        <div class="panel">
-            <h2 style="color: #f1c40f;">🏆 LEVEL MAP</h2>
-            <div id="levelButtons" class="level-grid"></div>
-            <button id="unlockLevelBtn" class="btn-elite btn-blue" onclick="watchAdToUnlockLevel()">🔓 FUNGUA LEVEL (0/6 ADS)</button>
-            <button class="btn-elite btn-red" onclick="closeAllPanels()">FUNGA</button>
-        </div>
-    </div>
-
-    <!-- ==================== GAME OVER MODAL ==================== -->
-    <div id="gameOverModal" class="overlay" style="display: none;">
-        <div class="panel">
-            <h2 style="color: #e74c3c;">💀 GAME OVER 💀</h2>
-            <p id="gameOverText">Ulifika Level 1</p>
-            <button class="btn-elite" onclick="reviveWithAd()">📺 TAZAMA TANGAZO UENDELEE</button>
-            <button class="btn-elite btn-secondary" onclick="restartGame()">🔄 ANZA UPYA</button>
-            <button class="btn-elite btn-secondary" onclick="closeGameOver()">🏠 MENU</button>
-        </div>
-    </div>
-
-    <!-- ==================== MYSTERY CHEST MODAL ==================== -->
-    <div id="chestModal" class="overlay" style="display: none;">
-        <div class="panel" style="text-align: center;">
-            <h2>🎁 SANDUKU LA SIRI 🎁</h2>
-            <p>Umecheza mechi 3! Fungua kwa tangazo!</p>
-            <div style="font-size: 70px; cursor: pointer; margin: 15px;" onclick="openChestWithAd()">📦</div>
-            <button class="btn-elite btn-secondary" onclick="closeChest()">FUNGA</button>
-        </div>
-    </div>
-
-    <!-- ==================== DOUBLE REWARD MODAL ==================== -->
-    <div id="doubleModal" class="overlay" style="display: none;">
-        <div class="panel" style="text-align: center;">
-            <h2 style="color: #f1c40f;">🎉 UMESHINDA! 🎉</h2>
-            <p id="doubleAmount">Umepata 0 coins</p>
-            <button id="doubleBtn" class="btn-elite" onclick="doubleRewardWithAd()">📺 MARA MBILI (+0)</button>
-            <button class="btn-elite btn-secondary" onclick="closeDoubleModal()">🚫 RUKA</button>
-        </div>
-    </div>
-
-    <!-- ==================== TOP NAVIGATION ==================== -->
-    <div class="top-nav">
-        <div class="stat-box" onclick="openShop()">🛒 SHOP</div>
-        <div class="stat-box" onclick="togglePause()">⏸️ PAUSE</div>
-        <div class="stat-box">💰 <span id="mainCoins">600</span></div>
-        <div class="stat-box" style="color: #ff6b6b; border-color: #ff6b6b;">❤️ <span id="mainLives">3</span></div>
-        <div class="stat-box" onclick="openLevelMap()">🏆 <span id="levelDisplay">L1</span></div>
-    </div>
-
-    <!-- ==================== GAME AREA ==================== -->
-    <div class="game-container">
-        <div style="width: 100%; max-width: 500px;">
-            <div id="powerIndicator"></div>
-            <canvas id="poolCanvas" width="450" height="280"></canvas>
-        </div>
-    </div>
-
-    <!-- ==================== AD BUTTONS ROW ==================== -->
-    <div class="ad-row">
-        <button class="btn-elite btn-green" onclick="watchAdForCoins()">📺 +500 COINS</button>
-        <button class="btn-elite btn-blue" onclick="watchAdForLife()">❤️ +1 LIFE</button>
-        <button class="btn-elite" onclick="showMysteryChest()">🎁 CHEST (AD)</button>
+    <div id="gameOverModal" class="modal">
+        <h1>GAME OVER</h1>
+        <p id="gameOverText" style="font-size: 20px; margin: 20px 0;"></p>
+        
+        <button class="btn-retry" onclick="handleRetry()">🔄 Play Again (Link 1)</button>
+        
+        <button class="btn-life" onclick="handleFreeLife()">🎁 Free Life (Link 2)</button>
     </div>
 
     <script>
-        // ============================================================
-        // ADSTERRA LINKS - BADILISHA HAPA NA LINK ZAKO HALISI
-        // ============================================================
-        const ADSTERRA_LINK_1 = "https://oddlystudent.com/tu1ixct1?key=bf9ebe5967e8fa09c93394892db398f0";
-        const ADSTERRA_LINK_2 = "https://oddlystudent.com/tu1ixct1?key=29084400";
-        // ============================================================
-        
-        let currentAdLink = ADSTERRA_LINK_1;
-        
-        function openAd() {
-            if (Math.random() > 0.5) {
-                currentAdLink = ADSTERRA_LINK_1;
-            } else {
-                currentAdLink = ADSTERRA_LINK_2;
-            }
-            window.open(currentAdLink, '_blank');
-            let totalAds = parseInt(localStorage.getItem("totalAdsWatched")) || 0;
-            totalAds++;
-            localStorage.setItem("totalAdsWatched", totalAds);
-            return currentAdLink;
-        }
-        
-        function showToast(message, isSuccess = true) {
-            let toast = document.createElement('div');
-            toast.className = 'toast';
-            if (!isSuccess) toast.classList.add('error');
-            toast.innerText = message;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-        
-        // ==================== GAME VARIABLES ====================
-        const canvas = document.getElementById('poolCanvas');
+        const canvas = document.getElementById('poolTable');
         const ctx = canvas.getContext('2d');
-        const body = document.getElementById('gameBody');
-        
-        // Game state
-        let coins = parseInt(localStorage.getItem("wCoins")) || 600;
-        let lives = parseInt(localStorage.getItem("wLives")) || 3;
-        let currentLevel = parseInt(localStorage.getItem("currentLevel")) || 1;
-        let unlockedLevels = parseInt(localStorage.getItem("unlockedLevels")) || 1;
-        let adsForLevel = parseInt(localStorage.getItem("adsForLevel")) || 0;
-        let tableColor = localStorage.getItem("tableColor") || "#27ae60";
+        canvas.width = 360;
+        canvas.height = 550;
+
+        // --- LINKS ZAKO ZA MONETAG ---
+        const LINK_1 = "https://omg10.com/4/10897169";
+        const LINK_2 = "https://omg10.com/4/10897168";
+
+        let lives = 3;
+        let coins = 0;
+        let currentLevel = 1;
         let isPaused = false;
-        let currentMode = "quest"; // quest or free
         let isDragging = false;
-        let mouseX = 0, mouseY = 0;
+        let startX, startY, mouseX, mouseY;
         let balls = [];
-        
-        // Ad tracking
-        let dailyAdsWatched = parseInt(localStorage.getItem("dailyAdsWatched")) || 0;
-        let dailyBonusClaimed = localStorage.getItem("dailyBonusClaimed") === "true";
-        let lastFreeLife = parseInt(localStorage.getItem("lastFreeLife")) || 0;
-        let gamesSinceLastAd = 0;
-        let matchesForChest = 0;
-        let pendingWinAmount = 0;
-        
-        const MAX_LEVELS = 8;
-        
-        // ==================== AUDIO ====================
-        function playSound(type) {
-            try {
-                let audio = new Audio();
-                if (type === 'hit') {
-                    audio.src = 'https://www.soundjay.com/misc/sounds/billiard-ball-clack-1.mp3';
-                } else if (type === 'coin') {
-                    audio.src = 'https://www.soundjay.com/misc/sounds/coin-drop-1.mp3';
-                } else if (type === 'win') {
-                    audio.src = 'https://www.soundjay.com/misc/sounds/win-fntsy-1.mp3';
-                }
-                audio.volume = 0.5;
-                audio.play().catch(e => console.log('Audio play failed'));
-            } catch(e) {}
-        }
-        
+
         function speak(text) {
-            try {
-                let utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'sw-TZ';
-                utterance.rate = 0.9;
-                window.speechSynthesis.speak(utterance);
-            } catch(e) {}
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'sw-TZ';
+            window.speechSynthesis.speak(msg);
         }
-        
-        // ==================== UI UPDATES ====================
-        function updateUI() {
-            document.getElementById('mainCoins').innerText = coins;
-            document.getElementById('mainLives').innerText = lives;
-            document.getElementById('shopCoins').innerText = coins;
-            document.getElementById('shopLives').innerText = lives;
-            document.getElementById('levelDisplay').innerText = currentMode === 'quest' ? 'L' + currentLevel : 'FREE';
-            localStorage.setItem("wCoins", coins);
-            localStorage.setItem("wLives", lives);
-            localStorage.setItem("currentLevel", currentLevel);
-            localStorage.setItem("tableColor", tableColor);
-        }
-        
-        // ==================== WELCOME SCREEN ====================
-        function saveName() {
-            let name = document.getElementById('playerNameInput').value;
-            if (name.trim() === "") name = "Bingwa";
-            localStorage.setItem("playerName", name);
-            document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('gameMenu').style.display = 'flex';
-            playSound('win');
-            speak("Karibu kwenye WSENDY POOL!");
-            resetDailyBonus();
-            setInterval(checkFreeLifeOffer, 60000);
-        }
-        
-        function skipName() {
-            localStorage.setItem("playerName", "Bingwa");
-            document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('gameMenu').style.display = 'flex';
-            playSound('win');
-            resetDailyBonus();
-            setInterval(checkFreeLifeOffer, 60000);
-        }
-        
-        // ==================== MENU FUNCTIONS ====================
-        function startQuestMode() {
-            document.getElementById('gameMenu').style.display = 'none';
-            currentMode = 'quest';
-            currentLevel = Math.min(currentLevel, unlockedLevels);
-            if (currentLevel < 1) currentLevel = 1;
-            initLevel(currentLevel);
-            isPaused = false;
-            updateUI();
-        }
-        
-        function startFreeMode() {
-            document.getElementById('gameMenu').style.display = 'none';
-            currentMode = 'free';
-            currentLevel = 1;
-            initLevel(1);
-            isPaused = false;
-            updateUI();
-        }
-        
-        function togglePause() {
-            isPaused = !isPaused;
-            document.getElementById('pauseMenu').style.display = isPaused ? 'flex' : 'none';
-        }
-        
-        function openShop() {
-            isPaused = true;
-            document.getElementById('pauseMenu').style.display = 'none';
-            document.getElementById('shopPanel').style.display = 'flex';
-        }
-        
-        function openLevelMap() {
-            isPaused = true;
-            document.getElementById('pauseMenu').style.display = 'none';
-            document.getElementById('levelMap').style.display = 'flex';
-            generateLevelButtons();
-        }
-        
-        function closeAllPanels() {
-            document.getElementById('shopPanel').style.display = 'none';
-            document.getElementById('levelMap').style.display = 'none';
-            document.getElementById('spinModal').style.display = 'none';
-            isPaused = false;
-        }
-        
-        function restartGame() {
-            lives = 3;
-            coins = Math.max(coins, 100);
-            currentLevel = 1;
-            updateUI();
-            initLevel(1);
-            document.getElementById('pauseMenu').style.display = 'none';
-            document.getElementById('gameOverModal').style.display = 'none';
-            isPaused = false;
-            speak("Mchezo umeanza upya!");
-        }
-        
-        function closeGameOver() {
-            document.getElementById('gameOverModal').style.display = 'none';
-            document.getElementById('gameMenu').style.display = 'flex';
-            isPaused = false;
-        }
-        
-        // ==================== SHOP FUNCTIONS ====================
-        function buyTableColor(color, price) {
-            if (coins >= price) {
-                coins -= price;
-                tableColor = color;
-                updateUI();
-                closeAllPanels();
-                playSound('win');
-                speak("Rangi ya meza imebadilika!");
-                showToast("Meza imependeza!", true);
-            } else {
-                showToast("Coins hazitoshi! Tazama tangazo.", false);
-            }
-        }
-        
-        function buyBackground(type, price) {
-            if (coins >= price) {
-                coins -= price;
-                const bgImages = {
-                    underground: "url('https://images.unsplash.com/photo-1574391884720-bbc3740c59d1?w=800')",
-                    club: "url('https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=800')",
-                    neon: "url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800')",
-                    villa: "url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800')",
-                    yacht: "url('https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=800')"
-                };
-                body.style.backgroundImage = bgImages[type];
-                updateUI();
-                closeAllPanels();
-                speak("Mazingira mapya yamewekwa!");
-                showToast("Hongera kwa mazingira mapya!", true);
-            } else {
-                showToast("Coins hazitoshi!", false);
-            }
-        }
-        
-        function handleUpload(event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    body.style.backgroundImage = `url('${e.target.result}')`;
-                    speak("Picha yako imewekwa!");
-                    closeAllPanels();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-        
-        // ==================== LEVEL SYSTEM ====================
-        function generateLevelButtons() {
-            let container = document.getElementById('levelButtons');
-            container.innerHTML = '';
-            for (let i = 1; i <= MAX_LEVELS; i++) {
-                let btn = document.createElement('div');
-                btn.className = 'level-btn';
-                btn.innerText = i <= unlockedLevels ? i : '🔒';
-                if (i <= unlockedLevels) {
-                    btn.onclick = () => {
-                        currentLevel = i;
-                        startQuestMode();
-                        closeAllPanels();
-                    };
-                }
-                container.appendChild(btn);
-            }
-            
-            let unlockBtn = document.getElementById('unlockLevelBtn');
-            if (unlockedLevels >= MAX_LEVELS) {
-                unlockBtn.innerText = "✅ LEVEL ZOTE ZIPO WAZI";
-                unlockBtn.disabled = true;
-            } else {
-                unlockBtn.innerText = `🔓 FUNGUA LEVEL (${adsForLevel}/6 ADS)`;
-                unlockBtn.disabled = false;
-            }
-        }
-        
-        function watchAdToUnlockLevel() {
-            if (unlockedLevels >= MAX_LEVELS) {
-                showToast("Umeshafungua level zote!", false);
-                return;
-            }
-            showToast(`Tangazo ${adsForLevel+1}/6...`, true);
-            openAd();
-            setTimeout(() => {
-                adsForLevel++;
-                localStorage.setItem("adsForLevel", adsForLevel);
-                speak(`Tangazo ${adsForLevel} kati ya 6 limekamilika`);
-                
-                if (adsForLevel >= 6) {
-                    adsForLevel = 0;
-                    unlockedLevels++;
-                    localStorage.setItem("unlockedLevels", unlockedLevels);
-                    speak("Hongera! Level mpya imefunguliwa!");
-                    playSound('win');
-                    showToast("✅ Level mpya imefunguliwa!", true);
-                } else {
-                    showToast(`✅ Tangazo ${adsForLevel}/6 limekamilika`, true);
-                }
-                generateLevelButtons();
-                updateUI();
-            }, 5000);
-        }
-        
-        // ==================== AD REWARDS ====================
-        function watchAdForCoins() {
-            showToast("Tazama tangazo la sekunde 5 upate 500💰...", true);
-            openAd();
-            setTimeout(() => {
-                coins += 500;
-                updateUI();
-                speak("Asante! Umeongeza coins 500!");
-                playSound('coin');
-                showToast("✅ +500 Coins!", true);
-            }, 5000);
-        }
-        
-        function watchAdForLife() {
-            showToast("Tazama tangazo upate Life 1...", true);
-            openAd();
-            setTimeout(() => {
-                lives++;
-                updateUI();
-                speak("Hongera! Umeongeza life moja!");
-                playSound('win');
-                showToast("✅ +1 Life!", true);
-            }, 5000);
-        }
-        
-        function reviveWithAd() {
-            openAd();
-            setTimeout(() => {
-                lives = 3;
-                coins += 200;
-                updateUI();
-                document.getElementById('gameOverModal').style.display = 'none';
-                isPaused = false;
-                speak("Umefufuliwa! Endelea kucheza!");
-                playSound('win');
-                showToast("✅ Umefufuliwa! +200 Coins!", true);
-                initLevel(currentLevel);
-            }, 5000);
-        }
-        
-        function skipLevelWithAd() {
-            if (confirm("Ruka level hii kwa kutazama tangazo moja?")) {
-                showToast("Tazama tangazo kuruka level...", true);
-                openAd();
-                setTimeout(() => {
-                    currentLevel++;
-                    if (currentLevel > MAX_LEVELS) currentLevel = MAX_LEVELS;
-                    initLevel(currentLevel);
-                    speak(`Umeruka hadi Level ${currentLevel}!`);
-                    playSound('win');
-                    showToast(`✅ Umeruka hadi Level ${currentLevel}!`, true);
-                    closeAllPanels();
-                    isPaused = false;
-                }, 5000);
-            }
-        }
-        
-        function doubleRewardWithAd() {
-            openAd();
-            setTimeout(() => {
-                coins += pendingWinAmount;
-                updateUI();
-                speak(`Umepata ${pendingWinAmount} coins za ziada!`);
-                playSound('coin');
-                showToast(`✅ +${pendingWinAmount} Coins!`, true);
-                document.getElementById('doubleModal').style.display = 'none';
-                isPaused = false;
-            }, 5000);
-        }
-        
-        function closeDoubleModal() {
-            document.getElementById('doubleModal').style.display = 'none';
-            isPaused = false;
-        }
-        
-        // ==================== DAILY BONUS ====================
-        function resetDailyBonus() {
-            let today = new Date().toDateString();
-            let lastReset = localStorage.getItem("bonusResetDate");
-            if (lastReset !== today) {
-                dailyAdsWatched = 0;
-                dailyBonusClaimed = false;
-                localStorage.setItem("dailyAdsWatched", 0);
-                localStorage.setItem("dailyBonusClaimed", false);
-                localStorage.setItem("bonusResetDate", today);
-                let btn = document.getElementById('dailyBonusBtn');
-                if (btn) btn.innerText = "🎁 DAILY BONUS (0/3 ADS)";
-            }
-        }
-        
-        function watchDailyBonusAd() {
-            if (dailyBonusClaimed) {
-                showToast("Umeshapata bonasi ya leo! Rudi kesho!", false);
-                return;
-            }
-            showToast(`Tangazo ${dailyAdsWatched+1}/3...`, true);
-            openAd();
-            setTimeout(() => {
-                dailyAdsWatched++;
-                localStorage.setItem("dailyAdsWatched", dailyAdsWatched);
-                speak(`Tangazo ${dailyAdsWatched} kati ya 3 limekamilika`);
-                
-                let btn = document.getElementById('dailyBonusBtn');
-                if (btn) btn.innerText = `🎁 DAILY BONUS (${dailyAdsWatched}/3 ADS)`;
-                
-                if (dailyAdsWatched >= 3) {
-                    let megaBonus = 5000;
-                    coins += megaBonus;
-                    dailyBonusClaimed = true;
-                    localStorage.setItem("dailyBonusClaimed", true);
-                    speak(`Hongera! Bonasi kubwa ya ${megaBonus} coins!`);
-                    playSound('win');
-                    showToast(`🎉 UMEPATA ${megaBonus} COINS! 🎉`, true);
-                    if (btn) btn.innerText = "✅ BONASI IMEPATIKANA LEO";
-                } else {
-                    showToast(`✅ Tangazo ${dailyAdsWatched}/3 limekamilika`, true);
-                }
-                updateUI();
-            }, 5000);
-        }
-        
-        // ==================== FREE LIFE OFFER ====================
-        function checkFreeLifeOffer() {
-            let now = Date.now();
-            let fiveMinutes = 5 * 60 * 1000;
-            
-            if (now - lastFreeLife >= fiveMinutes && lives < 5) {
-                let btn = document.createElement('div');
-                btn.id = "freeLifeToast";
-                btn.className = "free-life-btn";
-                btn.style.position = "fixed";
-                btn.style.bottom = "100px";
-                btn.style.right = "10px";
-                btn.style.background = "linear-gradient(135deg, #2ecc71, #27ae60)";
-                btn.style.padding = "12px 15px";
-                btn.style.borderRadius = "20px";
-                btn.style.cursor = "pointer";
-                btn.style.zIndex = "1000";
-                btn.style.fontWeight = "bold";
-                btn.style.color = "white";
-                btn.style.boxShadow = "0 5px 20px rgba(0,0,0,0.3)";
-                btn.innerHTML = "❤️ TAZAMA TANGAZO UPAZE LIFE BURE!";
-                btn.onclick = () => {
-                    openAd();
-                    setTimeout(() => {
-                        lives++;
-                        updateUI();
-                        lastFreeLife = Date.now();
-                        localStorage.setItem("lastFreeLife", lastFreeLife);
-                        btn.remove();
-                        speak("Umepata life ya ziada!");
-                        showToast("✅ +1 Life bure!", true);
-                    }, 5000);
-                };
-                document.body.appendChild(btn);
-                setTimeout(() => btn.remove(), 30000);
-            }
-        }
-        
-        // ==================== MYSTERY CHEST ====================
-        function showMysteryChest() {
-            document.getElementById('chestModal').style.display = 'flex';
-            isPaused = true;
-        }
-        
-        function openChestWithAd() {
-            openAd();
-            setTimeout(() => {
-                let rewards = [500, 1000, 2000, 5000, "life"];
-                let reward = rewards[Math.floor(Math.random() * rewards.length)];
-                
-                if (reward === "life") {
-                    lives++;
-                    speak("Hongera! Umepata Life 1 ya ziada!");
-                    showToast("❤️ +1 Life!", true);
-                } else {
-                    coins += reward;
-                    speak(`Hongera! Umepata ${reward} coins!`);
-                    showToast(`💰 +${reward} Coins!`, true);
-                }
-                updateUI();
-                document.getElementById('chestModal').style.display = 'none';
-                isPaused = false;
-                playSound('coin');
-            }, 5000);
-        }
-        
-        function closeChest() {
-            document.getElementById('chestModal').style.display = 'none';
-            isPaused = false;
-        }
-        
-        // ==================== LUCKY SPIN ====================
-        function openSpinWithAd() {
-            showToast("Tazama tangazo kwanza kupata Spin...", true);
-            openAd();
-            setTimeout(() => {
-                document.getElementById('spinModal').style.display = 'flex';
-                speak("Sasa unaweza kuzungusha gurudumu la bahati!");
-                showToast("✅ Spin imefunguliwa!", true);
-            }, 5000);
-        }
-        
-        function performSpin() {
-            let wheel = document.getElementById('wheel');
-            let deg = Math.floor(Math.random() * 360) + 1800;
-            wheel.style.transform = `rotate(${deg}deg)`;
-            document.getElementById('spinBtn').disabled = true;
-            
-            setTimeout(() => {
-                let prizes = [
-                    { name: "500 Coins", value: 500, chance: 30 },
-                    { name: "1000 Coins", value: 1000, chance: 25 },
-                    { name: "2 Lives", value: "lives", amount: 2, chance: 15 },
-                    { name: "5000 Coins", value: 5000, chance: 10 },
-                    { name: "10000 Coins", value: 10000, chance: 5 },
-                    { name: "Try Again", value: 0, chance: 15 }
-                ];
-                
-                let rand = Math.random() * 100;
-                let cumulative = 0;
-                let prize = prizes[0];
-                
-                for (let p of prizes) {
-                    cumulative += p.chance;
-                    if (rand <= cumulative) {
-                        prize = p;
-                        break;
-                    }
-                }
-                
-                if (prize.value === "lives") {
-                    lives += prize.amount;
-                    speak(`Hongera! Umepata ${prize.amount} Lives!`);
-                } else if (prize.value > 0) {
-                    coins += prize.value;
-                    speak(`Hongera! Umepata ${prize.value} Coins!`);
-                } else {
-                    speak("Pole! Jaribu tena!");
-                }
-                
-                updateUI();
-                playSound('coin');
-                document.getElementById('spinBtn').disabled = false;
-                closeAllPanels();
-                showToast(`🎡 Umepata: ${prize.name}!`, true);
-            }, 4000);
-        }
-        
-        // ==================== GAME PHYSICS ====================
-        function initLevel(level) {
-            balls = [{x: 100, y: canvas.height/2, r: 9, color: 'white', dx: 0, dy: 0}];
-            let startX = canvas.width - 80;
-            let startY = canvas.height/2;
-            let count = (currentMode === 'quest') ? Math.min(level + 1, 7) : 5;
-            
-            for (let i = 0; i < count; i++) {
+
+        function initLevel(lvl) {
+            balls = [{ x: 180, y: 400, r: 12, color: 'white', dx: 0, dy: 0 }];
+            for (let i = 0; i < lvl + 2; i++) {
                 balls.push({
-                    x: startX - Math.floor(i/2) * 20,
-                    y: startY + (i % 2 === 0 ? -15 : 15) * (i+1),
-                    r: 9,
-                    color: `hsl(${i * 60}, 70%, 55%)`,
+                    x: Math.random() * (canvas.width - 40) + 20,
+                    y: Math.random() * (canvas.height / 2),
+                    r: 12,
+                    color: `hsl(${Math.random() * 360}, 70%, 50%)`,
                     dx: 0, dy: 0
                 });
             }
-            draw();
+            updateUI();
         }
-        
-        function getCanvasCoords(e) {
-            let rect = canvas.getBoundingClientRect();
-            let scaleX = canvas.width / rect.width;
-            let scaleY = canvas.height / rect.height;
-            let clientX, clientY;
-            
-            if (e.touches) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            } else {
-                clientX = e.clientX;
-                clientY = e.clientY;
-            }
-            
-            return {
-                x: (clientX - rect.left) * scaleX,
-                y: (clientY - rect.top) * scaleY
-            };
+
+        function updateUI() {
+            document.getElementById('lvs').innerText = lives;
+            document.getElementById('cns').innerText = coins;
+            document.getElementById('lvl').innerText = currentLevel;
         }
-        
-        function handleStart(e) {
-            e.preventDefault();
+
+        function handleRetry() {
+            window.open(LINK_1, '_blank');
+            location.reload();
+        }
+
+        function handleFreeLife() {
+            window.open(LINK_2, '_blank');
+            lives = 1;
+            isPaused = false;
+            document.getElementById('gameOverModal').style.display = 'none';
+            updateUI();
+            speak("Karibu tena! Una maisha moja.");
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
             if (isPaused) return;
-            let pos = getCanvasCoords(e);
-            if (Math.hypot(pos.x - balls[0].x, pos.y - balls[0].y) < 25) {
+            const rect = canvas.getBoundingClientRect();
+            startX = e.clientX - rect.left;
+            startY = e.clientY - rect.top;
+            if (Math.hypot(startX - balls[0].x, startY - balls[0].y) < 30) {
                 isDragging = true;
             }
-        }
-        
-        function handleMove(e) {
-            e.preventDefault();
-            if (!isDragging || isPaused) return;
-            let pos = getCanvasCoords(e);
-            mouseX = pos.x;
-            mouseY = pos.y;
-            let power = Math.min(Math.hypot(mouseX - balls[0].x, mouseY - balls[0].y), 100);
-            document.getElementById('powerIndicator').style.width = (power / 100 * 100) + "%";
-        }
-        
-        function handleEnd(e) {
-            e.preventDefault();
-            if (!isDragging || isPaused) return;
-            let dx = (balls[0].x - mouseX) * 0.22;
-            let dy = (balls[0].y - mouseY) * 0.22;
-            balls[0].dx = dx;
-            balls[0].dy = dy;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+        });
+
+        canvas.addEventListener('mouseup', (e) => {
+            if (!isDragging) return;
+            const rect = canvas.getBoundingClientRect();
+            let endX = e.clientX - rect.left;
+            let endY = e.clientY - rect.top;
+            balls[0].dx = (startX - endX) * 0.12;
+            balls[0].dy = (startY - endY) * 0.12;
             isDragging = false;
-            document.getElementById('powerIndicator').style.width = "0%";
-            playSound('hit');
-        }
-        
-        canvas.addEventListener('mousedown', handleStart);
-        canvas.addEventListener('mousemove', handleMove);
-        canvas.addEventListener('mouseup', handleEnd);
-        canvas.addEventListener('touchstart', handleStart, {passive: false});
-        canvas.addEventListener('touchmove', handleMove, {passive: false});
-        canvas.addEventListener('touchend', handleEnd);
-        
-        function checkWin() {
-            if (balls.length === 1 && balls[0].color === 'white') {
-                let winAmount = currentLevel * 200;
-                coins += winAmount;
-                pendingWinAmount = winAmount;
-                updateUI();
-                playSound('win');
-                
-                gamesSinceLastAd++;
-                if (gamesSinceLastAd >= 5) {
-                    gamesSinceLastAd = 0;
-                    openAd();
-                    speak("Asante kwa mechi 5! Tangazo moja itasaidia!");
-                }
-                
-                matchesForChest++;
-                if (matchesForChest >= 3) {
-                    matchesForChest = 0;
-                    setTimeout(() => showMysteryChest(), 300);
-                }
-                
-                if (currentMode === 'quest') {
-                    if (currentLevel === unlockedLevels && unlockedLevels < MAX_LEVELS) {
-                        unlockedLevels++;
-                        localStorage.setItem("unlockedLevels", unlockedLevels);
-                    }
-                    if (currentLevel < MAX_LEVELS) {
-                        currentLevel++;
-                    }
-                } else {
-                    currentLevel++;
-                }
-                
-                document.getElementById('doubleAmount').innerText = `Umepata ${winAmount} coins`;
-                document.getElementById('doubleBtn').innerHTML = `📺 MARA MBILI (+${winAmount})`;
-                document.getElementById('doubleModal').style.display = 'flex';
-                isPaused = true;
-                
-                initLevel(currentMode === 'quest' ? currentLevel : 1);
-                speak("Hongera! Umeshinda mechi!");
-                updateUI();
-            }
-        }
-        
-        function checkGameOver() {
-            if (lives <= 0) {
-                document.getElementById('gameOverText').innerHTML = `Ulifika Level ${currentLevel}<br>💰 Coins: ${coins}`;
-                document.getElementById('gameOverModal').style.display = 'flex';
-                isPaused = true;
-            }
-        }
-        
+        });
+
         function draw() {
-            if (!ctx) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Table
-            ctx.fillStyle = tableColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
             // Pockets
-            let pockets = [[0,0], [canvas.width/2,0], [canvas.width,0], [0,canvas.height], [canvas.width/2,canvas.height], [canvas.width,canvas.height]];
+            const pockets = [[0,0], [canvas.width/2,0], [canvas.width,0], [0,canvas.height], [canvas.width/2,canvas.height], [canvas.width,canvas.height]];
+            ctx.fillStyle = "#111";
             pockets.forEach(p => {
-                ctx.fillStyle = "#111";
                 ctx.beginPath();
-                ctx.arc(p[0], p[1], 18, 0, Math.PI*2);
-                ctx.fill();
-                ctx.fillStyle = "#333";
-                ctx.beginPath();
-                ctx.arc(p[0]-2, p[1]-2, 14, 0, Math.PI*2);
+                ctx.arc(p[0], p[1], 20, 0, Math.PI*2);
                 ctx.fill();
             });
-            
-            // Power line
-            if (isDragging && !isPaused) {
-                ctx.save();
+
+            // Aim Line
+            if (isDragging) {
                 ctx.beginPath();
                 ctx.moveTo(balls[0].x, balls[0].y);
                 ctx.lineTo(mouseX, mouseY);
-                ctx.strokeStyle = "rgba(255,255,255,0.8)";
-                ctx.lineWidth = 3;
+                ctx.strokeStyle = "white";
+                ctx.setLineDash([5, 5]);
                 ctx.stroke();
-                ctx.restore();
+                ctx.setLineDash([]);
             }
-            
-            // Balls
-            balls.forEach(ball => {
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = ball.color === 'white' ? '#f0f0f0' : ball.color;
-                ctx.beginPath();
-                ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
-                ctx.fill();
-                ctx.fillStyle = 'rgba(0,0,0,0.3)';
-                ctx.beginPath();
-                ctx.arc(ball.x-2, ball.y-2, ball.r/3, 0, Math.PI*2);
-                ctx.fill();
-            });
-            
-            // Update physics
-            if (!isPaused) {
-                balls.forEach((ball, i) => {
-                    ball.x += ball.dx;
-                    ball.y += ball.dy;
-                    ball.dx *= 0.985;
-                    ball.dy *= 0.985;
-                    
-                    // Wall collision
-                    if (ball.x - ball.r < 0) { ball.x = ball.r; ball.dx *= -0.9; }
-                    if (ball.x + ball.r > canvas.width) { ball.x = canvas.width - ball.r; ball.dx *= -0.9; }
-                    if (ball.y - ball.r < 0) { ball.y = ball.r; ball.dy *= -0.9; }
-                    if (ball.y + ball.r > canvas.height) { ball.y = canvas.height - ball.r; ball.dy *= -0.9; }
-                    
-                    // Pocket collision
-                    for (let p of pockets) {
-                        if (Math.hypot(ball.x - p[0], ball.y - p[1]) < 18) {
-                            if (ball.color === 'white') {
-                                ball.x = 100;
-                                ball.y = canvas.height/2;
-                                ball.dx = 0;
-                                ball.dy = 0;
-                                lives--;
-                                updateUI();
-                                playSound('hit');
-                                speak("Faulo! Life imepungua!");
-                                checkGameOver();
+
+            // Physics & Drawing Balls
+            for (let i = 0; i < balls.length; i++) {
+                let b = balls[i];
+                if (!isPaused) {
+                    b.x += b.dx; b.y += b.dy;
+                    b.dx *= 0.985; b.dy *= 0.985;
+
+                    if (b.x < b.r || b.x > canvas.width - b.r) b.dx *= -0.8;
+                    if (b.y < b.r || b.y > canvas.height - b.r) b.dy *= -0.8;
+
+                    pockets.forEach(p => {
+                        if (Math.hypot(b.x - p[0], b.y - p[1]) < 20) {
+                            if (b.color === 'white') {
+                                b.x = 180; b.y = 400; b.dx = 0; b.dy = 0;
+                                lives--; updateUI();
+                                speak("Faulo!");
+                                if (lives <= 0) {
+                                    isPaused = true;
+                                    document.getElementById('gameOverText').innerText = `Level: ${currentLevel} | Coins: ${coins}`;
+                                    document.getElementById('gameOverModal').style.display = 'flex';
+                                }
                             } else {
                                 balls.splice(i, 1);
-                                coins += 50;
-                                updateUI();
-                                playSound('coin');
-                                checkWin();
+                                coins += 50; updateUI();
+                                if (balls.length === 1) {
+                                    currentLevel++;
+                                    speak("Level mpya!");
+                                    initLevel(currentLevel);
+                                }
                             }
-                            break;
                         }
-                    }
-                    
-                    // Ball collisions
-                    for (let j = i+1; j < balls.length; j++) {
+                    });
+
+                    for (let j = i + 1; j < balls.length; j++) {
                         let b2 = balls[j];
-                        let dx = b2.x - ball.x;
-                        let dy = b2.y - ball.y;
-                        let dist = Math.hypot(dx, dy);
-                        if (dist < ball.r + b2.r) {
-                            let angle = Math.atan2(dy, dx);
-                            let overlap = (ball.r + b2.r - dist) / 2;
-                            ball.x -= Math.cos(angle) * overlap;
-                            ball.y -= Math.sin(angle) * overlap;
-                            b2.x += Math.cos(angle) * overlap;
-                            b2.y += Math.sin(angle) * overlap;
-                            
-                            let v1 = {x: ball.dx, y: ball.dy};
-                            let v2 = {x: b2.dx, y: b2.dy};
-                            let nx = dx / dist;
-                            let ny = dy / dist;
-                            let vrelx = v1.x - v2.x;
-                            let vrely = v1.y - v2.y;
-                            let dot = vrelx * nx + vrely * ny;
-                            if (dot < 0) {
-                                let e = 0.9;
-                                let imp = (1 + e) * dot / 2;
-                                ball.dx -= imp * nx;
-                                ball.dy -= imp * ny;
-                                b2.dx += imp * nx;
-                                b2.dy += imp * ny;
-                                playSound('hit');
-                            }
+                        let dist = Math.hypot(b2.x - b.x, b2.y - b.y);
+                        if (dist < b.r + b2.r) {
+                            let angle = Math.atan2(b2.y - b.y, b2.x - b.x);
+                            let tempDx = b.dx; let tempDy = b.dy;
+                            b.dx = b2.dx * 0.8; b.dy = b2.dy * 0.8;
+                            b2.dx = tempDx * 0.8; b2.dy = tempDy * 0.8;
                         }
                     }
-                });
+                }
+                ctx.fillStyle = b.color;
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+                ctx.fill();
             }
-            
             requestAnimationFrame(draw);
         }
-        
-        // Initialize game
-        function init() {
-            if (localStorage.getItem("playerName")) {
-                document.getElementById('welcomeScreen').style.display = 'none';
-                document.getElementById('gameMenu').style.display = 'flex';
-                resetDailyBonus();
-                setInterval(checkFreeLifeOffer, 60000);
-            }
-            initLevel(1);
-            updateUI();
-            draw();
-        }
-        
-        init();
+
+        initLevel(1);
+        draw();
     </script>
 </body>
 </html>
