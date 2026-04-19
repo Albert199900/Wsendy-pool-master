@@ -3,56 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wsendy Pool: Billionaire Infinity</title>
+    <title>Wsendy Pool: Elite UI Billionaire</title>
     <style>
-        body { font-family: 'Arial Black', sans-serif; background: #000; color: white; text-align: center; margin: 0; overflow: hidden; user-select: none; }
-        .header { background: linear-gradient(135deg, #1e8449, #145a32); padding: 12px; border-bottom: 4px solid #f1c40f; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .stats-grid { display: flex; justify-content: space-around; background: #1a1a1a; padding: 10px; color: #f1c40f; font-size: 13px; border-bottom: 2px solid #333; }
+        :root { --gold: #f1c40f; --green: #2ecc71; --dark: #121212; --card: #1e1e1e; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--dark); color: white; text-align: center; margin: 0; overflow: hidden; user-select: none; }
         
-        /* Welcome & Shop Screens */
-        #welcomeScreen, #shopModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1e8449, #000); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #shopModal { background: rgba(0,0,0,0.95); display: none; z-index: 2500; }
-        .input-name { padding: 15px; border-radius: 10px; border: 2px solid gold; width: 250px; text-align: center; font-size: 18px; margin-bottom: 15px; outline: none; }
+        /* UI Containers */
+        .glass-panel { background: var(--card); border: 1px solid rgba(241, 196, 15, 0.3); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 20px; }
+        .full-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle at center, #1e8449 0%, #000 100%); }
 
-        .game-area { position: relative; display: inline-block; background: #3d251e; padding: 12px; border-radius: 20px; margin-top: 10px; box-shadow: 0 15px 50px rgba(0,0,0,0.9); }
-        canvas { border-radius: 12px; touch-action: none; display: block; border: 4px solid #1e8449; transition: background 0.5s; }
-        
-        .ui { margin-top: 5px; width: 360px; display: inline-block; }
-        .mrembo-box { display: flex; align-items: center; background: rgba(255, 255, 255, 0.08); padding: 12px; border-radius: 20px; border: 1px solid #f1c40f; }
-        .mrembo-img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #f1c40f; transition: 0.3s; }
-        .shield-active { box-shadow: 0 0 25px #00fbff; border-color: #00fbff; transform: scale(1.1); }
-        
-        .btn-main { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; color: white; background: linear-gradient(to bottom, #f39c12, #d35400); box-shadow: 0 5px 0 #873600; margin-top: 10px; text-transform: uppercase; }
-        .btn-share { background: linear-gradient(to bottom, #25d366, #128c7e); box-shadow: 0 5px 0 #075e54; }
-        .btn-shop { background: #444; box-shadow: 0 5px 0 #222; }
-        
-        #powerBar { width: 0%; height: 8px; background: linear-gradient(to right, #2ecc71, #f1c40f, #e74c3c); margin-bottom: 5px; border-radius: 4px; }
+        /* Buttons Elite */
+        .btn-elite { 
+            width: 280px; padding: 15px; margin: 10px; border: none; border-radius: 15px; 
+            font-weight: bold; font-size: 16px; cursor: pointer; text-transform: uppercase;
+            transition: 0.3s; color: white; background: linear-gradient(135deg, #f39c12, #d35400);
+            box-shadow: 0 4px 15px rgba(211, 84, 0, 0.4);
+        }
+        .btn-elite:active { transform: scale(0.95); }
+        .btn-secondary { background: #333; box-shadow: none; border: 1px solid #555; }
+        .btn-green { background: linear-gradient(135deg, #2ecc71, #27ae60); box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4); }
+
+        /* Level Grid UI */
+        .level-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 20px 0; }
+        .lvl-card { 
+            width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; 
+            border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer; transition: 0.3s;
+        }
+        .unlocked { background: var(--gold); color: black; box-shadow: 0 0 15px var(--gold); }
+        .locked { background: #333; color: #777; cursor: not-allowed; }
+
+        /* Game Elements */
+        .stats-bar { display: flex; justify-content: space-around; padding: 15px; background: var(--card); border-bottom: 2px solid var(--gold); }
+        .stat-item { background: #000; padding: 5px 15px; border-radius: 20px; border: 1px solid var(--gold); font-weight: bold; color: var(--gold); }
+        .game-area { margin-top: 15px; position: relative; }
+        canvas { border: 4px solid #1e8449; border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+
+        /* Spin Wheel Elite */
+        .wheel-box { position: relative; width: 220px; height: 220px; border: 8px solid var(--gold); border-radius: 50%; background: conic-gradient(#e74c3c 0deg 72deg, #3498db 72deg 144deg, #f1c40f 144deg 216deg, #2ecc71 216deg 288deg, #9b59b6 288deg 360deg); transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1); }
+        .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid white; z-index: 100; }
+
+        #powerBar { width: 0%; height: 8px; background: linear-gradient(to right, #2ecc71, #f1c40f, #e74c3c); border-radius: 4px; margin: 5px auto; max-width: 350px; }
     </style>
 </head>
 <body>
 
-    <div id="welcomeScreen">
-        <h1 style="color: gold; text-shadow: 2px 2px #000;">WSENDY POOL 🎱</h1>
-        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" style="width: 100px; border-radius: 50%; border: 3px solid gold; margin-bottom: 20px;">
-        <input type="text" id="playerNameInput" class="input-name" placeholder="Andika Jina Lako...">
-        <button class="btn-main" onclick="startGame()" style="width: 250px;">ANZA USHINDI 🚀</button>
+    <div id="welcomeScreen" class="full-screen">
+        <div class="glass-panel">
+            <h1 style="color: var(--gold); margin: 0;">WSENDY POOL</h1>
+            <p style="font-size: 12px; letter-spacing: 2px;">BILLIONAIRE EDITION</p>
+            <input type="text" id="playerNameInput" style="padding:15px; border-radius:12px; border:none; width:220px; margin:20px 0; text-align:center;" placeholder="Ingiza Jina Lako">
+            <br>
+            <button class="btn-elite" onclick="saveName()">ANZA MCHEZO 🚀</button>
+        </div>
     </div>
 
-    <div id="shopModal">
-        <h2 style="color: gold;">LUXURY SHOP 💎</h2>
-        <button class="btn-main" onclick="buyTable('#27ae60', 0)" style="background:#27ae60; width:250px;">KIJANI (BURE)</button>
-        <button class="btn-main" onclick="buyTable('#2980b9', 2000)" style="background:#2980b9; width:250px;">BLUU (2,000💰)</button>
-        <button class="btn-main" onclick="buyTable('#c0392b', 5000)" style="background:#c0392b; width:250px;">NYEKUNDU (5,000💰)</button>
-        <button class="btn-main" onclick="buyTable('#8e44ad', 10000)" style="background:#8e44ad; width:250px;">ZAMBARAU (10,000💰)</button>
-        <button class="btn-main btn-shop" onclick="toggleShop()" style="width:250px;">FUNGA</button>
+    <div id="gameMenu" class="full-screen" style="display:none;">
+        <div class="glass-panel">
+            <h2 style="color: var(--gold);">MAIN MENU</h2>
+            <button class="btn-elite" onclick="showLevelMap()">🏆 QUEST MODE</button>
+            <button class="btn-elite btn-secondary" onclick="startFreeMode()">💰 FREE MODE</button>
+            <button class="btn-elite btn-green" onclick="openSpin()">🎡 LUCKY SPIN</button>
+            <button class="btn-elite btn-secondary" onclick="toggleShop()">🛒 LUXURY SHOP</button>
+        </div>
     </div>
 
-    <div class="header">🌍 WSENDY POOL: BILLIONAIRE 🌍</div>
+    <div id="levelMap" class="full-screen" style="display:none; background: #000;">
+        <div class="glass-panel">
+            <h2 style="color: var(--gold);">LEVEL SELECTION</h2>
+            <div id="levelGrid" class="level-grid"></div>
+            <button class="btn-elite btn-secondary" onclick="backToMenu()">RUDI MENU</button>
+        </div>
+    </div>
 
-    <div class="stats-grid">
-        <span>LVL: <span id="lvl">1</span></span>
-        <span>💰 <span id="coins">100</span></span>
-        <span style="color:#e74c3c">❤️ <span id="lives">3</span></span>
+    <div id="spinModal" class="full-screen" style="display:none; background: rgba(0,0,0,0.9);">
+        <div class="glass-panel">
+            <h2 style="color: var(--gold);">LUCKY SPIN</h2>
+            <div style="position:relative; margin: 20px;">
+                <div class="pointer"></div>
+                <div id="wheel" class="wheel-box"></div>
+            </div>
+            <button id="spinBtn" class="btn-elite" onclick="startSpin()">ZUNGUSHA! 🚀</button>
+            <button class="btn-elite btn-secondary" onclick="closeSpin()">FUNGA</button>
+        </div>
+    </div>
+
+    <div id="shopModal" class="full-screen" style="display:none; background: rgba(0,0,0,0.9);">
+        <div class="glass-panel">
+            <h2 style="color: var(--gold);">LUXURY SHOP</h2>
+            <button class="btn-elite btn-secondary" onclick="buyTable('#27ae60', 0)">KIJANI (BURE)</button>
+            <button class="btn-elite btn-secondary" style="border-color:#2980b9" onclick="buyTable('#2980b9', 2000)">BLUU (2,000💰)</button>
+            <button class="btn-elite btn-secondary" style="border-color:#c0392b" onclick="buyTable('#c0392b', 5000)">NYEKUNDU (5,000💰)</button>
+            <button class="btn-elite btn-secondary" style="border-color:#8e44ad" onclick="buyTable('#8e44ad', 10000)">ZAMBARAU (10,000💰)</button>
+            <button class="btn-elite btn-elite" onclick="toggleShop()">FUNGA</button>
+        </div>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-item" id="displayMode">LVL: 1</div>
+        <div class="stat-item">💰 <span id="coins">100</span></div>
+        <div class="stat-item" style="color: #e74c3c; border-color: #e74c3c;">❤️ <span id="lives">3</span></div>
     </div>
 
     <div class="game-area">
@@ -60,137 +109,150 @@
         <canvas id="poolCanvas" width="350" height="200"></canvas>
     </div>
 
-    <div class="ui">
-        <div class="mrembo-box">
-            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" class="mrembo-img" id="mremboImg">
-            <div id="status" style="margin-left:15px; font-size:12px; color:#f1c40f; text-align:left; font-weight:bold;">"Karibu! Sambaza mchezo nikupe zawadi ya Shield!"</div>
-        </div>
-        <button class="btn-main btn-share" onclick="shareAndVerify()">📢 SHARE WHATSAPP (+1,000💰 & 🛡️)</button>
-        <button class="btn-main" onclick="watchAds()">📺 PATA MAISHA & COINS (ADS)</button>
-        <button class="btn-main btn-shop" onclick="toggleShop()">🛒 LUXURY SHOP</button>
+    <div style="padding: 10px;">
+        <button class="btn-elite btn-green" onclick="watchAds()" style="width: 320px;">📺 PATA 500 COINS (AD)</button>
     </div>
 
     <script>
         const canvas = document.getElementById('poolCanvas');
         const ctx = canvas.getContext('2d');
+        const adLink = "https://oddlystudent.com/tu1ixct1?key=bf9ebe5967e8fa09c93394892db398f0";
+
+        // Sauti
         const clackSound = new Audio('https://www.soundjay.com/misc/sounds/billiard-ball-clack-1.mp3');
-        const adLink = "https://www.your-adsterra-link.com"; // WEKA LINK YAKO HAPA
+        const coinSound = new Audio('https://www.soundjay.com/misc/sounds/coin-drop-1.mp3');
+        const winSound = new Audio('https://www.soundjay.com/misc/sounds/win-fntsy-1.mp3');
 
-        let level = 1, lives = 3, coins = 100, adCounter = 0;
-        let playerName = "Bingwa", hasShield = false, isDragging = false, mouseX, mouseY;
-        let balls = [], tableColor = '#27ae60', shareStartTime;
+        let level = 1, lives = 3, coins = 100, unlockedLevels = 1, isDragging = false;
+        let balls = [], tableColor = '#27ae60', currentMode = "quest";
 
-        function triggerVibration(d) { if (navigator.vibrate) navigator.vibrate(d); }
-
-        function startGame() {
-            let input = document.getElementById('playerNameInput').value;
-            if (input.trim() !== "") playerName = input;
+        function saveName() {
+            const name = document.getElementById('playerNameInput').value;
+            if(name) localStorage.setItem("wPlayerName", name);
             document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('status').innerText = `"Hujambo ${playerName}! Twende kazi!"`;
-            initLevel(1);
+            document.getElementById('gameMenu').style.display = 'flex';
+            winSound.play().catch(()=>{});
+        }
+
+        function showLevelMap() {
+            document.getElementById('levelMap').style.display = 'flex';
+            const grid = document.getElementById('levelGrid');
+            grid.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                const card = document.createElement('div');
+                card.className = `lvl-card ${i <= unlockedLevels ? 'unlocked' : 'locked'}`;
+                card.innerText = i <= unlockedLevels ? i : '🔒';
+                if(i <= unlockedLevels) card.onclick = () => { level = i; startQuest(); };
+                grid.appendChild(card);
+            }
+        }
+
+        function startQuest() {
+            document.getElementById('levelMap').style.display = 'none';
+            document.getElementById('gameMenu').style.display = 'none';
+            document.getElementById('displayMode').innerText = "LVL: " + level;
+            currentMode = "quest"; initLevel(level);
+        }
+
+        function startFreeMode() {
+            document.getElementById('gameMenu').style.display = 'none';
+            document.getElementById('displayMode').innerText = "FREE";
+            currentMode = "free"; initLevel(1);
+        }
+
+        function openSpin() { document.getElementById('spinModal').style.display = 'flex'; }
+        function closeSpin() { document.getElementById('spinModal').style.display = 'none'; }
+        
+        function startSpin() {
+            const wheel = document.getElementById('wheel');
+            const deg = Math.floor(Math.random() * 360) + 1800;
+            wheel.style.transform = `rotate(${deg}deg)`;
+            document.getElementById('spinBtn').disabled = true;
+            setTimeout(() => {
+                const prize = [1000, 200, 5000, 500, 100][Math.floor(Math.random()*5)];
+                coins += prize; coinSound.play();
+                alert("HONGERA! Umeshinda 💰" + prize);
+                updateUI(); closeSpin(); document.getElementById('spinBtn').disabled = false;
+            }, 4000);
         }
 
         function toggleShop() {
             const s = document.getElementById('shopModal');
-            s.style.display = (s.style.display === 'none' || s.style.display === '') ? 'flex' : 'none';
+            s.style.display = (s.style.display === 'none') ? 'flex' : 'none';
         }
 
         function buyTable(color, price) {
-            if (coins >= price) {
-                coins -= price; tableColor = color;
-                canvas.style.background = `radial-gradient(circle, ${color}, #000)`;
-                updateUI(); toggleShop();
-                document.getElementById('status').innerText = `"Umependeza sana na meza hii ${playerName}!"`;
-            } else { alert("Coins hazitoshi! Angalia Ads upate coins."); }
+            if(coins >= price) { 
+                coins -= price; tableColor = color; updateUI(); toggleShop(); winSound.play();
+            } else { alert("Coins hazitoshi!"); }
         }
 
-        function shareAndVerify() {
-            shareStartTime = Date.now();
-            const shareText = `Mkuu, cheza game hili la Pool upate siri za mrembo! Link: ${window.location.href}`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
-            window.onfocus = function() {
-                if ((Date.now() - shareStartTime) / 1000 > 4) {
-                    coins += 1000; hasShield = true;
-                    document.getElementById('mremboImg').classList.add('shield-active');
-                    document.getElementById('status').innerHTML = "<b>ZAWADI!</b> ✅ 1,000💰 & Shield vimeongezwa!";
-                    updateUI(); triggerVibration([100, 50, 100]);
-                    window.onfocus = null;
-                }
-            };
-        }
-
-        function watchAds() {
-            window.open(adLink, '_blank');
-            adCounter++;
-            if(adCounter >= 3) { adCounter = 0; lives = 5; coins += 500; alert("Hongera! Umepata Maisha na Coins."); }
-            updateUI();
-        }
-
-        function initLevel(l) {
-            balls = [{x:80, y:100, r:10, c:'white', dx:0, dy:0}];
-            if(l === 1) balls.push({x:240, y:100, r:10, c:'red', dx:0, dy:0}, {x:265, y:100, r:10, c:'yellow', dx:0, dy:0});
-            else for(let i=0; i<Math.min(l, 8); i++) balls.push({x:200+(i*15), y:50+(i*15), r:10, c:`hsl(${i*45}, 70%, 50%)`, dx:0, dy:0});
-            updateUI();
-        }
+        function watchAds() { window.open(adLink, '_blank'); coins += 500; updateUI(); }
 
         function updateUI() {
             document.getElementById('coins').innerText = coins;
             document.getElementById('lives').innerText = lives;
-            document.getElementById('lvl').innerText = level;
         }
 
-        canvas.onmousedown = (e) => { 
-            const r = canvas.getBoundingClientRect();
-            if(Math.hypot(e.clientX-r.left-balls[0].x, e.clientY-r.top-balls[0].y) < 25) isDragging = true;
-        };
+        function backToMenu() { 
+            document.getElementById('levelMap').style.display = 'none'; 
+            document.getElementById('gameMenu').style.display = 'flex'; 
+        }
 
+        function initLevel(l) {
+            balls = [{x:80, y:100, r:10, c:'white', dx:0, dy:0}];
+            let count = (currentMode === "quest") ? l + 1 : 6;
+            for(let i=0; i<count; i++) balls.push({x:200+(i*12), y:60+(i*15), r:10, c:`hsl(${i*50},70%,50%)`, dx:0, dy:0});
+        }
+
+        canvas.onmousedown = (e) => { isDragging = true; };
         canvas.onmousemove = (e) => {
             const r = canvas.getBoundingClientRect();
-            mouseX = e.clientX-r.left; mouseY = e.clientY-r.top;
+            let mouseX = e.clientX-r.left, mouseY = e.clientY-r.top;
             if(isDragging) document.getElementById('powerBar').style.width = Math.min(Math.hypot(mouseX-balls[0].x, mouseY-balls[0].y), 100) + "%";
         };
-
-        canvas.onmouseup = () => {
+        canvas.onmouseup = (e) => {
             if(!isDragging) return;
-            balls[0].dx = (balls[0].x - mouseX) * 0.22; balls[0].dy = (balls[0].y - mouseY) * 0.22;
+            const r = canvas.getBoundingClientRect();
+            balls[0].dx = (balls[0].x - (e.clientX-r.left)) * 0.2;
+            balls[0].dy = (balls[0].y - (e.clientY-r.top)) * 0.2;
             isDragging = false; document.getElementById('powerBar').style.width = "0%";
         };
 
-        const pockets = [{x:0,y:0}, {x:175,y:0}, {x:350,y:0}, {x:0,y:200}, {x:175,y:200}, {x:350,y:200}];
-
         function draw() {
             ctx.fillStyle = tableColor; ctx.fillRect(0, 0, 350, 200);
-            pockets.forEach(p => { ctx.fillStyle="#000"; ctx.beginPath(); ctx.arc(p.x, p.y, 16, 0, 7); ctx.fill(); });
+            
+            // Draw Pockets
+            ctx.fillStyle = "#000";
+            [{x:0,y:0},{x:175,y:0},{x:350,y:0},{x:0,y:200},{x:175,y:200},{x:350,y:200}].forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x, p.y, 15, 0, 7); ctx.fill();
+            });
 
             balls.forEach((b, i) => {
                 b.x += b.dx; b.y += b.dy; b.dx *= 0.985; b.dy *= 0.985;
                 if(b.x<10 || b.x>340) b.dx*=-1; if(b.y<10 || b.y>190) b.dy*=-1;
-
-                pockets.forEach(p => {
-                    if(Math.hypot(b.x-p.x, b.y-p.y) < 16) {
-                        if(b.c === 'white') { 
-                            if(hasShield) { hasShield = false; document.getElementById('mremboImg').classList.remove('shield-active'); }
-                            else lives--;
-                            b.x=80; b.y=100; b.dx=0; b.dy=0; 
-                        } else { balls.splice(i,1); coins += 50; if(balls.length === 1) { level++; initLevel(level); window.open(adLink, '_blank'); } }
-                        updateUI();
-                        if(lives<=0) { alert("Game Over! Jaribu tena."); location.reload(); }
+                
+                // Pocket check
+                if((b.x<20 || b.x>330) && (b.y<20 || b.y>180)) {
+                    if(b.c==='white') { b.x=80; b.y=100; b.dx=0; b.dy=0; lives--; }
+                    else { 
+                        balls.splice(i,1); coins+=50; coinSound.play();
+                        if(balls.length===1) {
+                            if(currentMode==="quest") {
+                                if(level === unlockedLevels) unlockedLevels++;
+                                winSound.play(); window.open(adLink, '_blank'); showLevelMap();
+                            } else { level++; initLevel(level); }
+                        }
                     }
-                });
-
-                for(let j=i+1; j<balls.length; j++) {
-                    let b2 = balls[j];
-                    if(Math.hypot(b.x-b2.x, b.y-b2.y) < 20) {
-                        clackSound.play(); triggerVibration(30);
-                        let tx = b.dx, ty = b.dy; b.dx = b2.dx; b.dy = b2.dy; b2.dx = tx; b2.dy = ty;
-                    }
+                    updateUI(); if(lives<=0) location.reload();
                 }
-                ctx.fillStyle=b.c; ctx.beginPath(); ctx.arc(b.x,b.y,10,0,7); ctx.fill();
+
+                ctx.fillStyle = b.c; ctx.beginPath(); ctx.arc(b.x, b.y, 10, 0, 7); ctx.fill();
                 if(b.c !== 'white') { ctx.fillStyle="white"; ctx.beginPath(); ctx.arc(b.x,b.y,5,0,7); ctx.fill(); }
             });
             requestAnimationFrame(draw);
         }
-        draw();
+        initLevel(1); draw();
     </script>
 </body>
 </html>
