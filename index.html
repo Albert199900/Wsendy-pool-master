@@ -3,223 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wsendy Pool Master</title>
+    <title>Wsendy Pool: Billionaire Infinity</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #121212;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-        }
+        body { font-family: 'Arial Black', sans-serif; background: #000; color: white; text-align: center; margin: 0; overflow: hidden; user-select: none; }
+        .header { background: linear-gradient(135deg, #1e8449, #145a32); padding: 12px; border-bottom: 4px solid #f1c40f; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .stats-grid { display: flex; justify-content: space-around; background: #1a1a1a; padding: 10px; color: #f1c40f; font-size: 13px; border-bottom: 2px solid #333; }
+        
+        /* Welcome & Shop Screens */
+        #welcomeScreen, #shopModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1e8449, #000); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        #shopModal { background: rgba(0,0,0,0.95); display: none; z-index: 2500; }
+        .input-name { padding: 15px; border-radius: 10px; border: 2px solid gold; width: 250px; text-align: center; font-size: 18px; margin-bottom: 15px; outline: none; }
 
-        .header {
-            width: 100%;
-            background-color: #1e8449;
-            padding: 15px 0;
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        .game-container {
-            margin-top: 20px;
-            position: relative;
-            background: #5c4033; /* Ukingo wa mbao */
-            padding: 10px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-
-        canvas {
-            background-color: #27ae60;
-            display: block;
-            border-radius: 5px;
-            touch-action: none;
-            cursor: crosshair;
-        }
-
-        .ui-panel {
-            margin-top: 15px;
-            width: 90%;
-            max-width: 350px;
-            text-align: center;
-        }
-
-        .btn-reset {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        .donation-box {
-            background: linear-gradient(135deg, #4facfe, #00f2fe);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .share-btn {
-            background-color: #25D366;
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 10px;
-            display: block;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .other-apps-title {
-            margin-top: 25px;
-            margin-bottom: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            border-bottom: 1px solid #444;
-            padding-bottom: 5px;
-            color: #f1c40f;
-        }
-
-        footer {
-            font-size: 12px;
-            color: #777;
-            padding-top: 20px;
-            padding-bottom: 30px;
-        }
+        .game-area { position: relative; display: inline-block; background: #3d251e; padding: 12px; border-radius: 20px; margin-top: 10px; box-shadow: 0 15px 50px rgba(0,0,0,0.9); }
+        canvas { border-radius: 12px; touch-action: none; display: block; border: 4px solid #1e8449; transition: background 0.5s; }
+        
+        .ui { margin-top: 5px; width: 360px; display: inline-block; }
+        .mrembo-box { display: flex; align-items: center; background: rgba(255, 255, 255, 0.08); padding: 12px; border-radius: 20px; border: 1px solid #f1c40f; }
+        .mrembo-img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #f1c40f; transition: 0.3s; }
+        .shield-active { box-shadow: 0 0 25px #00fbff; border-color: #00fbff; transform: scale(1.1); }
+        
+        .btn-main { width: 100%; padding: 14px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; color: white; background: linear-gradient(to bottom, #f39c12, #d35400); box-shadow: 0 5px 0 #873600; margin-top: 10px; text-transform: uppercase; }
+        .btn-share { background: linear-gradient(to bottom, #25d366, #128c7e); box-shadow: 0 5px 0 #075e54; }
+        .btn-shop { background: #444; box-shadow: 0 5px 0 #222; }
+        
+        #powerBar { width: 0%; height: 8px; background: linear-gradient(to right, #2ecc71, #f1c40f, #e74c3c); margin-bottom: 5px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="header">🎱 Wsendy Pool Master</div>
-
-    <div class="game-container" id="gameArea">
-        <canvas id="poolCanvas" width="320" height="480"></canvas>
+    <div id="welcomeScreen">
+        <h1 style="color: gold; text-shadow: 2px 2px #000;">WSENDY POOL 🎱</h1>
+        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" style="width: 100px; border-radius: 50%; border: 3px solid gold; margin-bottom: 20px;">
+        <input type="text" id="playerNameInput" class="input-name" placeholder="Andika Jina Lako...">
+        <button class="btn-main" onclick="startGame()" style="width: 250px;">ANZA USHINDI 🚀</button>
     </div>
 
-    <div class="ui-panel">
-        <p style="font-size: 14px; color: #aaa;">Maelekezo: Vuta mpira mweupe nyuma na achia ili kupiga.</p>
-        <button class="btn-reset" onclick="resetGame()">Anza Upya Game</button>
+    <div id="shopModal">
+        <h2 style="color: gold;">LUXURY SHOP 💎</h2>
+        <button class="btn-main" onclick="buyTable('#27ae60', 0)" style="background:#27ae60; width:250px;">KIJANI (BURE)</button>
+        <button class="btn-main" onclick="buyTable('#2980b9', 2000)" style="background:#2980b9; width:250px;">BLUU (2,000💰)</button>
+        <button class="btn-main" onclick="buyTable('#c0392b', 5000)" style="background:#c0392b; width:250px;">NYEKUNDU (5,000💰)</button>
+        <button class="btn-main" onclick="buyTable('#8e44ad', 10000)" style="background:#8e44ad; width:250px;">ZAMBARAU (10,000💰)</button>
+        <button class="btn-main btn-shop" onclick="toggleShop()" style="width:250px;">FUNGA</button>
+    </div>
 
-        <div class="donation-box">
-            <div style="font-size: 12px;">Changia Mradi (Albert Kabonge):</div>
-            <div style="font-size: 20px; font-weight: bold;">0627962633</div>
+    <div class="header">🌍 WSENDY POOL: BILLIONAIRE 🌍</div>
+
+    <div class="stats-grid">
+        <span>LVL: <span id="lvl">1</span></span>
+        <span>💰 <span id="coins">100</span></span>
+        <span style="color:#e74c3c">❤️ <span id="lives">3</span></span>
+    </div>
+
+    <div class="game-area">
+        <div id="powerBar"></div>
+        <canvas id="poolCanvas" width="350" height="200"></canvas>
+    </div>
+
+    <div class="ui">
+        <div class="mrembo-box">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" class="mrembo-img" id="mremboImg">
+            <div id="status" style="margin-left:15px; font-size:12px; color:#f1c40f; text-align:left; font-weight:bold;">"Karibu! Sambaza mchezo nikupe zawadi ya Shield!"</div>
         </div>
-
-        <p style="font-size: 14px; color: #ccc; margin-bottom: 5px;">Kwa mawasiliano zaidi:</p>
-        <a href="https://wa.me/255627962633" class="share-btn" style="background-color: #128C7E;">📱 WhatsApp: 0627962633</a>
-        
-        <a href="https://api.whatsapp.com/send?text=Njoo tucheze Wsendy Pool Master! https://albert199900.github.io/Wsendy-Pool-Master/" class="share-btn">🔗 Share Game WhatsApp</a>
-
-        <div class="other-apps-title">Zingine Kutoka Kwa Albert</div>
-        <a href="https://albert199900.github.io/Sms/" class="share-btn" style="background-color: #6c5ce7;">✉️ Wsendy SMS Pro</a>
-        <a href="https://albert199900.github.io/Wsendy-play-all/" class="share-btn" style="background-color: #ff9f43;">🎵 Wsendy Play All</a>
-
-        <footer>© 2024 Wsendy Games | Iringa, Tanzania</footer>
+        <button class="btn-main btn-share" onclick="shareAndVerify()">📢 SHARE WHATSAPP (+1,000💰 & 🛡️)</button>
+        <button class="btn-main" onclick="watchAds()">📺 PATA MAISHA & COINS (ADS)</button>
+        <button class="btn-main btn-shop" onclick="toggleShop()">🛒 LUXURY SHOP</button>
     </div>
 
     <script>
-        // --- ADSTERRA POPUNDER LOGIC ---
-        // Inafungua tangazo lako mara ya kwanza mtumiaji akigusa game
-        let adServed = false;
-        document.getElementById('gameArea').addEventListener('touchstart', function() {
-            if (!adServed) {
-                window.open("https://oddlystudent.com/tu1ixct1?key=bf9ebe5967e8fa09c93394892db398f029084400", "_blank");
-                adServed = true;
-            }
-        });
-        document.getElementById('gameArea').addEventListener('mousedown', function() {
-            if (!adServed) {
-                window.open("https://oddlystudent.com/tu1ixct1?key=bf9ebe5967e8fa09c93394892db398f029084400", "_blank");
-                adServed = true;
-            }
-        });
-
-        // --- POOL GAME LOGIC ---
         const canvas = document.getElementById('poolCanvas');
         const ctx = canvas.getContext('2d');
-        let balls = [];
-        let isDragging = false;
-        let dragPos = {x: 0, y: 0};
+        const clackSound = new Audio('https://www.soundjay.com/misc/sounds/billiard-ball-clack-1.mp3');
+        const adLink = "https://www.your-adsterra-link.com"; // WEKA LINK YAKO HAPA
 
-        function initGame() {
-            balls = [
-                {x: 160, y: 380, vx: 0, vy: 0, r: 10, color: 'white', isCue: true}, // Mpira mweupe
-                {x: 160, y: 120, vx: 0, vy: 0, r: 10, color: '#f1c40f'}, // Njano
-                {x: 148, y: 100, vx: 0, vy: 0, r: 10, color: '#e74c3c'}, // Nyekundu
-                {x: 172, y: 100, vx: 0, vy: 0, r: 10, color: '#e74c3c'},
-                {x: 160, y: 80, vx: 0, vy: 0, r: 10, color: '#2c3e50'} // Mweusi
-            ];
+        let level = 1, lives = 3, coins = 100, adCounter = 0;
+        let playerName = "Bingwa", hasShield = false, isDragging = false, mouseX, mouseY;
+        let balls = [], tableColor = '#27ae60', shareStartTime;
+
+        function triggerVibration(d) { if (navigator.vibrate) navigator.vibrate(d); }
+
+        function startGame() {
+            let input = document.getElementById('playerNameInput').value;
+            if (input.trim() !== "") playerName = input;
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('status').innerText = `"Hujambo ${playerName}! Twende kazi!"`;
+            initLevel(1);
         }
+
+        function toggleShop() {
+            const s = document.getElementById('shopModal');
+            s.style.display = (s.style.display === 'none' || s.style.display === '') ? 'flex' : 'none';
+        }
+
+        function buyTable(color, price) {
+            if (coins >= price) {
+                coins -= price; tableColor = color;
+                canvas.style.background = `radial-gradient(circle, ${color}, #000)`;
+                updateUI(); toggleShop();
+                document.getElementById('status').innerText = `"Umependeza sana na meza hii ${playerName}!"`;
+            } else { alert("Coins hazitoshi! Angalia Ads upate coins."); }
+        }
+
+        function shareAndVerify() {
+            shareStartTime = Date.now();
+            const shareText = `Mkuu, cheza game hili la Pool upate siri za mrembo! Link: ${window.location.href}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
+            window.onfocus = function() {
+                if ((Date.now() - shareStartTime) / 1000 > 4) {
+                    coins += 1000; hasShield = true;
+                    document.getElementById('mremboImg').classList.add('shield-active');
+                    document.getElementById('status').innerHTML = "<b>ZAWADI!</b> ✅ 1,000💰 & Shield vimeongezwa!";
+                    updateUI(); triggerVibration([100, 50, 100]);
+                    window.onfocus = null;
+                }
+            };
+        }
+
+        function watchAds() {
+            window.open(adLink, '_blank');
+            adCounter++;
+            if(adCounter >= 3) { adCounter = 0; lives = 5; coins += 500; alert("Hongera! Umepata Maisha na Coins."); }
+            updateUI();
+        }
+
+        function initLevel(l) {
+            balls = [{x:80, y:100, r:10, c:'white', dx:0, dy:0}];
+            if(l === 1) balls.push({x:240, y:100, r:10, c:'red', dx:0, dy:0}, {x:265, y:100, r:10, c:'yellow', dx:0, dy:0});
+            else for(let i=0; i<Math.min(l, 8); i++) balls.push({x:200+(i*15), y:50+(i*15), r:10, c:`hsl(${i*45}, 70%, 50%)`, dx:0, dy:0});
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('coins').innerText = coins;
+            document.getElementById('lives').innerText = lives;
+            document.getElementById('lvl').innerText = level;
+        }
+
+        canvas.onmousedown = (e) => { 
+            const r = canvas.getBoundingClientRect();
+            if(Math.hypot(e.clientX-r.left-balls[0].x, e.clientY-r.top-balls[0].y) < 25) isDragging = true;
+        };
+
+        canvas.onmousemove = (e) => {
+            const r = canvas.getBoundingClientRect();
+            mouseX = e.clientX-r.left; mouseY = e.clientY-r.top;
+            if(isDragging) document.getElementById('powerBar').style.width = Math.min(Math.hypot(mouseX-balls[0].x, mouseY-balls[0].y), 100) + "%";
+        };
+
+        canvas.onmouseup = () => {
+            if(!isDragging) return;
+            balls[0].dx = (balls[0].x - mouseX) * 0.22; balls[0].dy = (balls[0].y - mouseY) * 0.22;
+            isDragging = false; document.getElementById('powerBar').style.width = "0%";
+        };
+
+        const pockets = [{x:0,y:0}, {x:175,y:0}, {x:350,y:0}, {x:0,y:200}, {x:175,y:200}, {x:350,y:200}];
 
         function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Mashimo
-            ctx.fillStyle = '#111';
-            [[0,0], [320,0], [0,480], [320,480], [0,240], [320,240]].forEach(p => {
-                ctx.beginPath(); ctx.arc(p[0], p[1], 18, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = tableColor; ctx.fillRect(0, 0, 350, 200);
+            pockets.forEach(p => { ctx.fillStyle="#000"; ctx.beginPath(); ctx.arc(p.x, p.y, 16, 0, 7); ctx.fill(); });
+
+            balls.forEach((b, i) => {
+                b.x += b.dx; b.y += b.dy; b.dx *= 0.985; b.dy *= 0.985;
+                if(b.x<10 || b.x>340) b.dx*=-1; if(b.y<10 || b.y>190) b.dy*=-1;
+
+                pockets.forEach(p => {
+                    if(Math.hypot(b.x-p.x, b.y-p.y) < 16) {
+                        if(b.c === 'white') { 
+                            if(hasShield) { hasShield = false; document.getElementById('mremboImg').classList.remove('shield-active'); }
+                            else lives--;
+                            b.x=80; b.y=100; b.dx=0; b.dy=0; 
+                        } else { balls.splice(i,1); coins += 50; if(balls.length === 1) { level++; initLevel(level); window.open(adLink, '_blank'); } }
+                        updateUI();
+                        if(lives<=0) { alert("Game Over! Jaribu tena."); location.reload(); }
+                    }
+                });
+
+                for(let j=i+1; j<balls.length; j++) {
+                    let b2 = balls[j];
+                    if(Math.hypot(b.x-b2.x, b.y-b2.y) < 20) {
+                        clackSound.play(); triggerVibration(30);
+                        let tx = b.dx, ty = b.dy; b.dx = b2.dx; b.dy = b2.dy; b2.dx = tx; b2.dy = ty;
+                    }
+                }
+                ctx.fillStyle=b.c; ctx.beginPath(); ctx.arc(b.x,b.y,10,0,7); ctx.fill();
+                if(b.c !== 'white') { ctx.fillStyle="white"; ctx.beginPath(); ctx.arc(b.x,b.y,5,0,7); ctx.fill(); }
             });
-
-            // Mipira
-            balls.forEach(b => {
-                ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
-                ctx.fillStyle = b.color; ctx.fill(); ctx.closePath();
-                
-                // Physics rahisi
-                b.x += b.vx; b.y += b.vy;
-                b.vx *= 0.985; b.vy *= 0.985; // Msuguano
-
-                if(b.x < b.r || b.x > canvas.width-b.r) b.vx *= -1;
-                if(b.y < b.r || b.y > canvas.height-b.r) b.vy *= -1;
-            });
-
-            // Mstari wa kulenga
-            if (isDragging) {
-                ctx.beginPath();
-                ctx.moveTo(balls[0].x, balls[0].y);
-                ctx.lineTo(dragPos.x, dragPos.y);
-                ctx.strokeStyle = 'white'; ctx.setLineDash([5, 5]);
-                ctx.stroke(); ctx.setLineDash([]);
-            }
             requestAnimationFrame(draw);
         }
-
-        canvas.addEventListener('touchstart', e => {
-            const rect = canvas.getBoundingClientRect();
-            const touchX = (e.touches[0].clientX - rect.left) * (canvas.width / rect.width);
-            const touchY = (e.touches[0].clientY - rect.top) * (canvas.height / rect.height);
-            if (Math.hypot(touchX - balls[0].x, touchY - balls[0].y) < 30) {
-                isDragging = true; dragPos = {x: touchX, y: touchY};
-            }
-        });
-
-        canvas.addEventListener('touchmove', e => {
-            if (!isDragging) return;
-            const rect = canvas.getBoundingClientRect();
-            dragPos.x = (e.touches[0].clientX - rect.left) * (canvas.width / rect.width);
-            dragPos.y = (e.touches[0].clientY - rect.top) * (canvas.height / rect.height);
-        });
-
-        canvas.addEventListener('touchend', () => {
-            if (!isDragging) return;
-            isDragging = false;
-            balls[0].vx = (balls[0].x - dragPos.x) * 0.15;
-            balls[0].vy = (balls[0].y - dragPos.y) * 0.15;
-        });
-
-        function resetGame() { initGame(); }
-        initGame(); draw();
+        draw();
     </script>
 </body>
 </html>
