@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>WSENDY POOL - PESA KWA MATANGAZO</title>
+    <title>WSENDY POOL - PESA KWA MATANGAZO (REALISTIC 4K)</title>
     <style>
         * {
             box-sizing: border-box;
@@ -22,6 +22,7 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            background-image: url('https://images.unsplash.com/photo-1574391884720-bbc3740c59d1?w=1920&q=80');
         }
         
         .top-nav {
@@ -49,6 +50,9 @@
             font-size: 14px;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .stat-box:active {
@@ -60,15 +64,18 @@
             display: flex;
             justify-content: center;
             margin: 10px 0;
+            position: relative;
         }
         
         canvas {
             width: 100%;
-            max-width: 500px;
+            max-width: 900px;
             height: auto;
-            border: 10px solid #5c3a21;
+            /* Muonekano Halisi wa Ukingo wa Mbao (Realistic Wood Border) */
+            background: #1a6b1a; 
+            border: 25px solid #4a2e15;
             border-radius: 15px;
-            background: #1a6b1a;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 20px 50px rgba(0,0,0,0.8);
             cursor: grab;
             touch-action: none;
         }
@@ -84,7 +91,8 @@
             margin: 8px auto;
             border-radius: 10px;
             transition: width 0.05s linear;
-            max-width: 500px;
+            max-width: 900px;
+            box-shadow: 0 0 10px rgba(241,196,15,0.5);
         }
         
         .btn-elite {
@@ -108,25 +116,10 @@
             box-shadow: 0 2px 0 #b45f1b;
         }
         
-        .btn-green {
-            background: linear-gradient(135deg, #2ecc71, #27ae60);
-            box-shadow: 0 5px 0 #1e8449;
-        }
-        
-        .btn-blue {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            box-shadow: 0 5px 0 #1c5980;
-        }
-        
-        .btn-red {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            box-shadow: 0 5px 0 #8b1a1a;
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #555, #333);
-            box-shadow: 0 5px 0 #222;
-        }
+        .btn-green { background: linear-gradient(135deg, #2ecc71, #27ae60); box-shadow: 0 5px 0 #1e8449; }
+        .btn-blue { background: linear-gradient(135deg, #3498db, #2980b9); box-shadow: 0 5px 0 #1c5980; }
+        .btn-red { background: linear-gradient(135deg, #e74c3c, #c0392b); box-shadow: 0 5px 0 #8b1a1a; }
+        .btn-secondary { background: linear-gradient(135deg, #555, #333); box-shadow: 0 5px 0 #222; }
         
         .overlay {
             position: fixed;
@@ -139,11 +132,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
         }
         
         .panel {
-            background: #111;
+            background: rgba(17, 17, 17, 0.95);
             border: 2px solid #f1c40f;
             border-radius: 25px;
             width: 90%;
@@ -151,7 +144,7 @@
             padding: 20px;
             max-height: 85vh;
             overflow-y: auto;
-            box-shadow: 0 0 30px rgba(241,196,15,0.3);
+            box-shadow: 0 0 40px rgba(241,196,15,0.4);
         }
         
         .shop-header {
@@ -209,21 +202,14 @@
             animation: fadeInUp 0.3s;
             white-space: nowrap;
             font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
         
-        .toast.error {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-        }
+        .toast.error { background: linear-gradient(135deg, #e74c3c, #c0392b); }
         
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         
         @keyframes bounce {
@@ -231,21 +217,11 @@
             50% { transform: translateY(-5px); }
         }
         
-        .free-life-btn {
-            animation: bounce 0.8s infinite;
-            cursor: pointer;
-        }
+        .free-life-btn { animation: bounce 0.8s infinite; cursor: pointer; }
         
-        .panel::-webkit-scrollbar {
-            width: 5px;
-        }
-        .panel::-webkit-scrollbar-track {
-            background: #222;
-        }
-        .panel::-webkit-scrollbar-thumb {
-            background: #f1c40f;
-            border-radius: 5px;
-        }
+        .panel::-webkit-scrollbar { width: 5px; }
+        .panel::-webkit-scrollbar-track { background: #222; }
+        .panel::-webkit-scrollbar-thumb { background: #f1c40f; border-radius: 5px; }
         
         input, select {
             padding: 12px;
@@ -261,19 +237,17 @@
 </head>
 <body id="gameBody">
 
-    <!-- WELCOME SCREEN -->
     <div id="welcomeScreen" class="overlay" style="display: flex;">
         <div class="panel">
-            <h1 style="color: #f1c40f; margin: 0;">🚗 WSENDY POOL</h1>
-            <p style="font-size: 12px; color: #ccc;">PESA KWA MATANGAZO EDITION</p>
-            <div style="font-size: 60px; margin: 15px 0;">🎱</div>
+            <h1 style="color: #f1c40f; margin: 0;">🎱 WSENDY POOL</h1>
+            <p style="font-size: 12px; color: #ccc;">REALISTIC 4K - PESA KWA MATANGAZO</p>
+            <div style="font-size: 60px; margin: 15px 0; text-shadow: 0 0 20px #f1c40f;">🎱</div>
             <input type="text" id="playerNameInput" placeholder="Ingiza Jina Lako" value="Bingwa">
             <button class="btn-elite" onclick="saveName()">🚀 ANZA MCHEZO</button>
             <button class="btn-elite btn-secondary" onclick="skipName()">⏭️ RUKA</button>
         </div>
     </div>
 
-    <!-- MAIN MENU -->
     <div id="gameMenu" class="overlay">
         <div class="panel">
             <h2 style="color: #f1c40f;">🏠 MENU KUU</h2>
@@ -285,7 +259,6 @@
         </div>
     </div>
 
-    <!-- PAUSE MENU -->
     <div id="pauseMenu" class="overlay">
         <div class="panel">
             <h2 style="color: #f1c40f;">⏸️ PAUSED</h2>
@@ -297,20 +270,18 @@
         </div>
     </div>
 
-    <!-- SPIN MODAL -->
     <div id="spinModal" class="overlay">
         <div class="panel">
             <h2 style="color: #f1c40f;">🎡 LUCKY SPIN</h2>
             <div style="position: relative; margin: 20px auto;">
                 <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 25px solid white; z-index: 10;"></div>
-                <div id="wheel" style="width: 200px; height: 200px; border-radius: 50%; border: 5px solid gold; background: conic-gradient(#e74c3c 0deg 72deg, #3498db 72deg 144deg, #f1c40f 144deg 216deg, #2ecc71 216deg 288deg, #9b59b6 288deg 360deg); transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1); margin: 0 auto;"></div>
+                <div id="wheel" style="width: 200px; height: 200px; border-radius: 50%; border: 5px solid gold; background: conic-gradient(#e74c3c 0deg 72deg, #3498db 72deg 144deg, #f1c40f 144deg 216deg, #2ecc71 216deg 288deg, #9b59b6 288deg 360deg); transition: transform 4s cubic-bezier(0.2, 0.8, 0.2, 1); margin: 0 auto; box-shadow: 0 0 20px gold;"></div>
             </div>
             <button id="spinBtn" class="btn-elite" onclick="performSpin()">🌀 ZUNGUSHA</button>
             <button class="btn-elite btn-secondary" onclick="closeAllPanels()">FUNGA</button>
         </div>
     </div>
 
-    <!-- SHOP PANEL -->
     <div id="shopPanel" class="overlay">
         <div class="panel">
             <h2 style="color: #f1c40f;">🛒 SHOP & CLUBS</h2>
@@ -330,15 +301,14 @@
             <button class="btn-elite" onclick="buyBackground('yacht', 8000)">🛥️ YACHT (8000💰)</button>
             
             <p style="font-size: 12px; margin: 10px 0 5px;">🎨 RANGI ZA MEZA</p>
-            <button class="btn-elite btn-secondary" onclick="buyTableColor('#27ae60', 0)">🟢 KIJANI (BURE)</button>
-            <button class="btn-elite btn-secondary" onclick="buyTableColor('#2980b9', 2000)">🔵 BLUU (2000💰)</button>
-            <button class="btn-elite btn-secondary" onclick="buyTableColor('#c0392b', 5000)">🔴 NYEKUNDU (5000💰)</button>
+            <button class="btn-elite btn-secondary" onclick="buyTableColor('#1a6b1a', 0)">🟢 KIJANI (BURE)</button>
+            <button class="btn-elite btn-secondary" onclick="buyTableColor('#1c4273', 2000)">🔵 BLUU KOOLEZA (2000💰)</button>
+            <button class="btn-elite btn-secondary" onclick="buyTableColor('#7a1616', 5000)">🔴 NYEKUNDU (5000💰)</button>
             
             <button class="btn-elite btn-red" onclick="closeAllPanels()">FUNGA</button>
         </div>
     </div>
 
-    <!-- LEVEL MAP -->
     <div id="levelMap" class="overlay">
         <div class="panel">
             <h2 style="color: #f1c40f;">🏆 LEVEL MAP</h2>
@@ -348,7 +318,6 @@
         </div>
     </div>
 
-    <!-- GAME OVER MODAL -->
     <div id="gameOverModal" class="overlay" style="display: none;">
         <div class="panel">
             <h2 style="color: #e74c3c;">💀 GAME OVER 💀</h2>
@@ -359,17 +328,15 @@
         </div>
     </div>
 
-    <!-- MYSTERY CHEST MODAL -->
     <div id="chestModal" class="overlay" style="display: none;">
         <div class="panel" style="text-align: center;">
             <h2>🎁 SANDUKU LA SIRI 🎁</h2>
             <p>Umecheza mechi 3! Fungua kwa tangazo!</p>
-            <div style="font-size: 70px; cursor: pointer; margin: 15px;" onclick="openChestWithAd()">📦</div>
+            <div style="font-size: 70px; cursor: pointer; margin: 15px; text-shadow: 0 0 20px gold;" onclick="openChestWithAd()">📦</div>
             <button class="btn-elite btn-secondary" onclick="closeChest()">FUNGA</button>
         </div>
     </div>
 
-    <!-- DOUBLE REWARD MODAL -->
     <div id="doubleModal" class="overlay" style="display: none;">
         <div class="panel" style="text-align: center;">
             <h2 style="color: #f1c40f;">🎉 UMESHINDA! 🎉</h2>
@@ -379,24 +346,22 @@
         </div>
     </div>
 
-    <!-- TOP NAVIGATION -->
     <div class="top-nav">
         <div class="stat-box" onclick="openShop()">🛒 SHOP</div>
         <div class="stat-box" onclick="togglePause()">⏸️ PAUSE</div>
         <div class="stat-box">💰 <span id="mainCoins">600</span></div>
         <div class="stat-box" style="color: #ff6b6b; border-color: #ff6b6b;">❤️ <span id="mainLives">3</span></div>
         <div class="stat-box" onclick="openLevelMap()">🏆 <span id="levelDisplay">L1</span></div>
+        <div class="stat-box" onclick="toggleMusic()" id="musicBtn" style="border-color:#3498db; color:#3498db;">🔊 MZIKI</div>
     </div>
 
-    <!-- GAME AREA -->
     <div class="game-container">
-        <div style="width: 100%; max-width: 500px;">
+        <div style="width: 100%; max-width: 900px;">
             <div id="powerIndicator"></div>
-            <canvas id="poolCanvas" width="450" height="280"></canvas>
+            <canvas id="poolCanvas" width="900" height="560"></canvas>
         </div>
     </div>
 
-    <!-- AD BUTTONS ROW -->
     <div class="ad-row">
         <button class="btn-elite btn-green" onclick="watchAdForCoins()">📺 +500 COINS</button>
         <button class="btn-elite btn-blue" onclick="watchAdForLife()">❤️ +1 LIFE</button>
@@ -405,24 +370,18 @@
 
     <script>
         // ============================================================
-        // LINKS ZAKO MPYA ZA MATANGAZO - ZIMEBADILISHWA
+        // LINKS ZA MATANGAZO YAKO (KABISA HAYAJATOKA)
         // ============================================================
         const ADSTERRA_LINK_1 = "https://omg10.com/4/10897169";
         const ADSTERRA_LINK_2 = "https://omg10.com/4/10897168";
-        // ============================================================
         
         let currentAdLink = ADSTERRA_LINK_1;
         
         function openAd() {
-            if (Math.random() > 0.5) {
-                currentAdLink = ADSTERRA_LINK_1;
-            } else {
-                currentAdLink = ADSTERRA_LINK_2;
-            }
+            currentAdLink = Math.random() > 0.5 ? ADSTERRA_LINK_1 : ADSTERRA_LINK_2;
             window.open(currentAdLink, '_blank');
             let totalAds = parseInt(localStorage.getItem("totalAdsWatched")) || 0;
-            totalAds++;
-            localStorage.setItem("totalAdsWatched", totalAds);
+            localStorage.setItem("totalAdsWatched", totalAds + 1);
             return currentAdLink;
         }
         
@@ -435,6 +394,33 @@
             setTimeout(() => toast.remove(), 3000);
         }
         
+        // ==================== BACKGROUND MUSIC ====================
+        let bgMusic = new Audio('https://cdn.pixabay.com/download/audio/2022/02/10/audio_fc862ce22c.mp3?filename=lofi-study-112191.mp3');
+        bgMusic.loop = true;
+        bgMusic.volume = 0.2;
+        let isMusicPlaying = false;
+
+        function playBackgroundMusic() {
+            if(!isMusicPlaying) {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    document.getElementById('musicBtn').innerText = "🔊 MZIKI";
+                }).catch(e => console.log('BGM Play blocked by browser until user interacts'));
+            }
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+                document.getElementById('musicBtn').innerText = "🔇 MZIKI";
+            } else {
+                bgMusic.play();
+                isMusicPlaying = true;
+                document.getElementById('musicBtn').innerText = "🔊 MZIKI";
+            }
+        }
+
         // ==================== GAME VARIABLES ====================
         const canvas = document.getElementById('poolCanvas');
         const ctx = canvas.getContext('2d');
@@ -445,7 +431,7 @@
         let currentLevel = parseInt(localStorage.getItem("currentLevel")) || 1;
         let unlockedLevels = parseInt(localStorage.getItem("unlockedLevels")) || 1;
         let adsForLevel = parseInt(localStorage.getItem("adsForLevel")) || 0;
-        let tableColor = localStorage.getItem("tableColor") || "#27ae60";
+        let tableColor = localStorage.getItem("tableColor") || "#1a6b1a";
         let isPaused = false;
         let currentMode = "quest";
         let isDragging = false;
@@ -464,15 +450,11 @@
         function playSound(type) {
             try {
                 let audio = new Audio();
-                if (type === 'hit') {
-                    audio.src = 'https://www.soundjay.com/misc/sounds/billiard-ball-clack-1.mp3';
-                } else if (type === 'coin') {
-                    audio.src = 'https://www.soundjay.com/misc/sounds/coin-drop-1.mp3';
-                } else if (type === 'win') {
-                    audio.src = 'https://www.soundjay.com/misc/sounds/win-fntsy-1.mp3';
-                }
+                if (type === 'hit') audio.src = 'https://www.soundjay.com/misc/sounds/billiard-ball-clack-1.mp3';
+                else if (type === 'coin') audio.src = 'https://www.soundjay.com/misc/sounds/coin-drop-1.mp3';
+                else if (type === 'win') audio.src = 'https://www.soundjay.com/misc/sounds/win-fntsy-1.mp3';
                 audio.volume = 0.5;
-                audio.play().catch(e => console.log('Audio play failed'));
+                audio.play().catch(e => {});
             } catch(e) {}
         }
         
@@ -504,6 +486,7 @@
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('gameMenu').style.display = 'flex';
             playSound('win');
+            playBackgroundMusic();
             speak("Karibu kwenye WSENDY POOL!");
             resetDailyBonus();
             setInterval(checkFreeLifeOffer, 60000);
@@ -514,6 +497,7 @@
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('gameMenu').style.display = 'flex';
             playSound('win');
+            playBackgroundMusic();
             resetDailyBonus();
             setInterval(checkFreeLifeOffer, 60000);
         }
@@ -598,11 +582,11 @@
             if (coins >= price) {
                 coins -= price;
                 const bgImages = {
-                    underground: "url('https://images.unsplash.com/photo-1574391884720-bbc3740c59d1?w=800')",
-                    club: "url('https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=800')",
-                    neon: "url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800')",
-                    villa: "url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800')",
-                    yacht: "url('https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=800')"
+                    underground: "url('https://images.unsplash.com/photo-1574391884720-bbc3740c59d1?w=1920&q=80')",
+                    club: "url('https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=1920&q=80')",
+                    neon: "url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=1920&q=80')",
+                    villa: "url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1920&q=80')",
+                    yacht: "url('https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1920&q=80')"
                 };
                 body.style.backgroundImage = bgImages[type];
                 updateUI();
@@ -665,7 +649,6 @@
                 adsForLevel++;
                 localStorage.setItem("adsForLevel", adsForLevel);
                 speak(`Tangazo ${adsForLevel} kati ya 6 limekamilika`);
-                
                 if (adsForLevel >= 6) {
                     adsForLevel = 0;
                     unlockedLevels++;
@@ -803,7 +786,6 @@
         function checkFreeLifeOffer() {
             let now = Date.now();
             let fiveMinutes = 5 * 60 * 1000;
-            
             if (now - lastFreeLife >= fiveMinutes && lives < 5) {
                 let btn = document.createElement('div');
                 btn.id = "freeLifeToast";
@@ -818,7 +800,7 @@
                 btn.style.zIndex = "1000";
                 btn.style.fontWeight = "bold";
                 btn.style.color = "white";
-                btn.style.boxShadow = "0 5px 20px rgba(0,0,0,0.3)";
+                btn.style.boxShadow = "0 5px 20px rgba(0,0,0,0.5)";
                 btn.innerHTML = "❤️ TAZAMA TANGAZO UPAZE LIFE BURE!";
                 btn.onclick = () => {
                     openAd();
@@ -847,7 +829,6 @@
             setTimeout(() => {
                 let rewards = [500, 1000, 2000, 5000, "life"];
                 let reward = rewards[Math.floor(Math.random() * rewards.length)];
-                
                 if (reward === "life") {
                     lives++;
                     speak("Hongera! Umepata Life 1 ya ziada!");
@@ -901,10 +882,7 @@
                 
                 for (let p of prizes) {
                     cumulative += p.chance;
-                    if (rand <= cumulative) {
-                        prize = p;
-                        break;
-                    }
+                    if (rand <= cumulative) { prize = p; break; }
                 }
                 
                 if (prize.value === "lives") {
@@ -925,20 +903,32 @@
             }, 4000);
         }
         
+        // ==================== INIT 15 BALLS (REALISTIC SETUP) ====================
         function initLevel(level) {
-            balls = [{x: 100, y: canvas.height/2, r: 9, color: 'white', dx: 0, dy: 0}];
-            let startX = canvas.width - 80;
-            let startY = canvas.height/2;
-            let count = (currentMode === 'quest') ? Math.min(level + 1, 7) : 5;
+            balls = [];
+            // Cue ball (Mpira Mweupe)
+            balls.push({x: 250, y: canvas.height/2, r: 16, color: 'white', dx: 0, dy: 0});
             
-            for (let i = 0; i < count; i++) {
-                balls.push({
-                    x: startX - Math.floor(i/2) * 20,
-                    y: startY + (i % 2 === 0 ? -15 : 15) * (i+1),
-                    r: 9,
-                    color: `hsl(${i * 60}, 70%, 55%)`,
-                    dx: 0, dy: 0
-                });
+            // Triangle formation for 15 Balls
+            let startX = 650;
+            let startY = canvas.height/2;
+            let r = 16;
+            
+            // Colors reflecting standard pool balls (solids and stripes) with black 8-ball
+            let colors = ['#f1c40f', '#3498db', '#e74c3c', '#9b59b6', '#111', '#2ecc71', '#e67e22', '#7f8c8d', '#d35400', '#2980b9', '#c0392b', '#8e44ad', '#16a085', '#f39c12', '#2c3e50'];
+            let colorIndex = 0;
+
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col <= row; col++) {
+                    balls.push({
+                        x: startX + row * (r * Math.sqrt(3) + 1),
+                        y: startY - row * (r + 0.5) + col * (r * 2 + 1),
+                        r: r,
+                        color: colors[colorIndex],
+                        dx: 0, dy: 0
+                    });
+                    colorIndex++;
+                }
             }
             draw();
         }
@@ -956,7 +946,6 @@
                 clientX = e.clientX;
                 clientY = e.clientY;
             }
-            
             return {
                 x: (clientX - rect.left) * scaleX,
                 y: (clientY - rect.top) * scaleY
@@ -967,7 +956,8 @@
             e.preventDefault();
             if (isPaused) return;
             let pos = getCanvasCoords(e);
-            if (Math.hypot(pos.x - balls[0].x, pos.y - balls[0].y) < 25) {
+            // Must click near the white ball to start aiming
+            if (balls[0] && Math.hypot(pos.x - balls[0].x, pos.y - balls[0].y) < 50) {
                 isDragging = true;
             }
         }
@@ -978,15 +968,15 @@
             let pos = getCanvasCoords(e);
             mouseX = pos.x;
             mouseY = pos.y;
-            let power = Math.min(Math.hypot(mouseX - balls[0].x, mouseY - balls[0].y), 100);
-            document.getElementById('powerIndicator').style.width = (power / 100 * 100) + "%";
+            let power = Math.min(Math.hypot(mouseX - balls[0].x, mouseY - balls[0].y), 200);
+            document.getElementById('powerIndicator').style.width = (power / 200 * 100) + "%";
         }
         
         function handleEnd(e) {
             e.preventDefault();
-            if (!isDragging || isPaused) return;
-            let dx = (balls[0].x - mouseX) * 0.22;
-            let dy = (balls[0].y - mouseY) * 0.22;
+            if (!isDragging || isPaused || !balls[0]) return;
+            let dx = (balls[0].x - mouseX) * 0.18; // Nguvu halisi ya pigo
+            let dy = (balls[0].y - mouseY) * 0.18;
             balls[0].dx = dx;
             balls[0].dy = dy;
             isDragging = false;
@@ -1027,9 +1017,7 @@
                         unlockedLevels++;
                         localStorage.setItem("unlockedLevels", unlockedLevels);
                     }
-                    if (currentLevel < MAX_LEVELS) {
-                        currentLevel++;
-                    }
+                    if (currentLevel < MAX_LEVELS) currentLevel++;
                 } else {
                     currentLevel++;
                 }
@@ -1055,65 +1043,122 @@
         
         function draw() {
             if (!ctx) return;
+            // Clear
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
+            // Draw Table Background
             ctx.fillStyle = tableColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
+            // Draw Inner Table Shadow (Cushions)
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.strokeStyle = "rgba(0,0,0,0.3)";
+            ctx.lineWidth = 15;
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
+            ctx.shadowColor = "transparent";
+            
+            // Draw Pockets
             let pockets = [[0,0], [canvas.width/2,0], [canvas.width,0], [0,canvas.height], [canvas.width/2,canvas.height], [canvas.width,canvas.height]];
             pockets.forEach(p => {
+                ctx.fillStyle = "#050505";
+                ctx.beginPath();
+                ctx.arc(p[0], p[1], 36, 0, Math.PI*2);
+                ctx.fill();
                 ctx.fillStyle = "#111";
                 ctx.beginPath();
-                ctx.arc(p[0], p[1], 18, 0, Math.PI*2);
-                ctx.fill();
-                ctx.fillStyle = "#333";
-                ctx.beginPath();
-                ctx.arc(p[0]-2, p[1]-2, 14, 0, Math.PI*2);
+                ctx.arc(p[0]-3, p[1]-3, 28, 0, Math.PI*2);
                 ctx.fill();
             });
             
-            if (isDragging && !isPaused) {
+            // Aiming Line & Cue Stick (Fimbo Halisi)
+            if (isDragging && !isPaused && balls[0]) {
+                let pdx = balls[0].x - mouseX;
+                let pdy = balls[0].y - mouseY;
+                let angle = Math.atan2(pdy, pdx);
+                let powerDist = Math.min(Math.hypot(pdx, pdy), 200);
+                
+                // Mstari wa Kulenga (Dotted Aiming Line)
                 ctx.save();
                 ctx.beginPath();
+                ctx.setLineDash([5, 10]);
                 ctx.moveTo(balls[0].x, balls[0].y);
-                ctx.lineTo(mouseX, mouseY);
-                ctx.strokeStyle = "rgba(255,255,255,0.8)";
-                ctx.lineWidth = 3;
+                let aimLength = 1000;
+                ctx.lineTo(balls[0].x + Math.cos(angle) * aimLength, balls[0].y + Math.sin(angle) * aimLength);
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+                ctx.lineWidth = 2;
                 ctx.stroke();
+                ctx.restore();
+
+                // Fimbo ya Pool (Cue Stick) inavutwa nyuma
+                ctx.save();
+                ctx.translate(balls[0].x, balls[0].y);
+                // Angle inaelekea kwa mouse (kuvuta fimbo nyuma)
+                ctx.rotate(angle + Math.PI); 
+                
+                // Ncha ya fimbo (Blue tip)
+                ctx.fillStyle = "#3498db";
+                ctx.fillRect(16 + (powerDist / 2), -3, 4, 6);
+                
+                // Kiwiliwili cha fimbo (Light wood shaft)
+                ctx.fillStyle = "#d4a373";
+                ctx.fillRect(20 + (powerDist / 2), -4, 250, 8);
+                
+                // Nyuma ya fimbo (Dark wood butt)
+                ctx.fillStyle = "#3e2723";
+                ctx.fillRect(270 + (powerDist / 2), -5, 150, 10);
                 ctx.restore();
             }
             
+            // Draw Balls with Realistic 3D Shading
             balls.forEach(ball => {
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = ball.color === 'white' ? '#f0f0f0' : ball.color;
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 8;
+                ctx.shadowOffsetX = 3;
+                ctx.shadowOffsetY = 3;
+
+                let gradient = ctx.createRadialGradient(ball.x - ball.r/3, ball.y - ball.r/3, ball.r/8, ball.x, ball.y, ball.r);
+                gradient.addColorStop(0, '#ffffff'); // Highlight point
+                gradient.addColorStop(0.3, ball.color === 'white' ? '#f5f5f5' : ball.color); 
+                gradient.addColorStop(1, '#000000'); // Dark edge
+
+                ctx.fillStyle = gradient;
                 ctx.beginPath();
                 ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
                 ctx.fill();
-                ctx.fillStyle = 'rgba(0,0,0,0.3)';
-                ctx.beginPath();
-                ctx.arc(ball.x-2, ball.y-2, ball.r/3, 0, Math.PI*2);
-                ctx.fill();
+                
+                ctx.shadowColor = "transparent"; // Reset
             });
             
+            // Physics Engine (Uhalisia wa Msuguano)
             if (!isPaused) {
                 balls.forEach((ball, i) => {
                     ball.x += ball.dx;
                     ball.y += ball.dy;
-                    ball.dx *= 0.985;
-                    ball.dy *= 0.985;
                     
-                    if (ball.x - ball.r < 0) { ball.x = ball.r; ball.dx *= -0.9; }
-                    if (ball.x + ball.r > canvas.width) { ball.x = canvas.width - ball.r; ball.dx *= -0.9; }
-                    if (ball.y - ball.r < 0) { ball.y = ball.r; ball.dy *= -0.9; }
-                    if (ball.y + ball.r > canvas.height) { ball.y = canvas.height - ball.r; ball.dy *= -0.9; }
+                    // Friction Halisi
+                    ball.dx *= 0.99;
+                    ball.dy *= 0.99;
                     
+                    // Smooth Stop (Izuie isizunguke milele taratibu sana)
+                    if (Math.abs(ball.dx) < 0.02) ball.dx = 0;
+                    if (Math.abs(ball.dy) < 0.02) ball.dy = 0;
+                    
+                    // Bouncing kwenye matakia (Cushions)
+                    if (ball.x - ball.r < 0) { ball.x = ball.r; ball.dx *= -0.85; }
+                    if (ball.x + ball.r > canvas.width) { ball.x = canvas.width - ball.r; ball.dx *= -0.85; }
+                    if (ball.y - ball.r < 0) { ball.y = ball.r; ball.dy *= -0.85; }
+                    if (ball.y + ball.r > canvas.height) { ball.y = canvas.height - ball.r; ball.dy *= -0.85; }
+                    
+                    // Pockets (Kutumbukia)
                     for (let p of pockets) {
-                        if (Math.hypot(ball.x - p[0], ball.y - p[1]) < 18) {
+                        if (Math.hypot(ball.x - p[0], ball.y - p[1]) < 36) {
                             if (ball.color === 'white') {
-                                ball.x = 100;
+                                ball.x = 250;
                                 ball.y = canvas.height/2;
-                                ball.dx = 0;
-                                ball.dy = 0;
+                                ball.dx = 0; ball.dy = 0;
                                 lives--;
                                 updateUI();
                                 playSound('hit');
@@ -1130,19 +1175,24 @@
                         }
                     }
                     
+                    // Kugongana kwa Mipira (Ball to ball collision)
                     for (let j = i+1; j < balls.length; j++) {
                         let b2 = balls[j];
                         let dx = b2.x - ball.x;
                         let dy = b2.y - ball.y;
                         let dist = Math.hypot(dx, dy);
+                        
                         if (dist < ball.r + b2.r) {
                             let angle = Math.atan2(dy, dx);
                             let overlap = (ball.r + b2.r - dist) / 2;
+                            
+                            // Tenganisha mipira iliyopishana
                             ball.x -= Math.cos(angle) * overlap;
                             ball.y -= Math.sin(angle) * overlap;
                             b2.x += Math.cos(angle) * overlap;
                             b2.y += Math.sin(angle) * overlap;
                             
+                            // Hesabu nguvu ya kugongana
                             let v1 = {x: ball.dx, y: ball.dy};
                             let v2 = {x: b2.dx, y: b2.dy};
                             let nx = dx / dist;
@@ -1150,8 +1200,9 @@
                             let vrelx = v1.x - v2.x;
                             let vrely = v1.y - v2.y;
                             let dot = vrelx * nx + vrely * ny;
+                            
                             if (dot < 0) {
-                                let e = 0.9;
+                                let e = 0.95; // Restitution (Nguvu ya kutanuka)
                                 let imp = (1 + e) * dot / 2;
                                 ball.dx -= imp * nx;
                                 ball.dy -= imp * ny;
