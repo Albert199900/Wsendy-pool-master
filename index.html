@@ -71,7 +71,6 @@
             width: 100%;
             max-width: 900px;
             height: auto;
-            /* Muonekano Halisi wa Ukingo wa Mbao (Realistic Wood Border) */
             background: #1a6b1a; 
             border: 25px solid #4a2e15;
             border-radius: 15px;
@@ -458,13 +457,28 @@
             } catch(e) {}
         }
         
+        // ==================== FEMALE SWAHILI VOICE ====================
         function speak(text) {
             try {
                 let utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'sw-TZ';
-                utterance.rate = 0.9;
+                utterance.lang = 'sw-TZ'; // Lugha ya Kiswahili
+                utterance.rate = 0.95;
+                utterance.pitch = 1.5; // Pitch kubwa inafanya sauti iwe nyembamba (ya kike)
+                
+                // Kujaribu kutafuta sauti ya kike moja kwa moja kama ipo
+                let voices = window.speechSynthesis.getVoices();
+                let femaleVoice = voices.find(v => v.lang.includes('sw') && v.name.toLowerCase().includes('female'));
+                if(femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
+                
                 window.speechSynthesis.speak(utterance);
             } catch(e) {}
+        }
+        
+        // Load voices mapema ili ziwe tayari
+        if(speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
         }
         
         function updateUI() {
@@ -487,7 +501,7 @@
             document.getElementById('gameMenu').style.display = 'flex';
             playSound('win');
             playBackgroundMusic();
-            speak("Karibu kwenye WSENDY POOL!");
+            speak("Karibu kwenye WSENDY POOL! Mimi ni msaidizi wako, tucheze sasa.");
             resetDailyBonus();
             setInterval(checkFreeLifeOffer, 60000);
         }
@@ -498,6 +512,7 @@
             document.getElementById('gameMenu').style.display = 'flex';
             playSound('win');
             playBackgroundMusic();
+            speak("Twende kazi, mchezo umeanza!");
             resetDailyBonus();
             setInterval(checkFreeLifeOffer, 60000);
         }
@@ -555,7 +570,7 @@
             document.getElementById('pauseMenu').style.display = 'none';
             document.getElementById('gameOverModal').style.display = 'none';
             isPaused = false;
-            speak("Mchezo umeanza upya!");
+            speak("Tumeanza upya, kila la heri!");
         }
         
         function closeGameOver() {
@@ -571,7 +586,7 @@
                 updateUI();
                 closeAllPanels();
                 playSound('win');
-                speak("Rangi ya meza imebadilika!");
+                speak("Sawa, rangi ya meza imebadilika!");
                 showToast("Meza imependeza!", true);
             } else {
                 showToast("Coins hazitoshi! Tazama tangazo.", false);
@@ -591,7 +606,7 @@
                 body.style.backgroundImage = bgImages[type];
                 updateUI();
                 closeAllPanels();
-                speak("Mazingira mapya yamewekwa!");
+                speak("Mandhari mpya yamewekwa, inavutia sana!");
                 showToast("Hongera kwa mazingira mapya!", true);
             } else {
                 showToast("Coins hazitoshi!", false);
@@ -604,7 +619,7 @@
                 let reader = new FileReader();
                 reader.onload = function(e) {
                     body.style.backgroundImage = `url('${e.target.result}')`;
-                    speak("Picha yako imewekwa!");
+                    speak("Picha yako imewekwa, umependeza!");
                     closeAllPanels();
                 };
                 reader.readAsDataURL(file);
@@ -648,12 +663,12 @@
             setTimeout(() => {
                 adsForLevel++;
                 localStorage.setItem("adsForLevel", adsForLevel);
-                speak(`Tangazo ${adsForLevel} kati ya 6 limekamilika`);
+                speak(`Umetazama tangazo la ${adsForLevel} kati ya sita`);
                 if (adsForLevel >= 6) {
                     adsForLevel = 0;
                     unlockedLevels++;
                     localStorage.setItem("unlockedLevels", unlockedLevels);
-                    speak("Hongera! Level mpya imefunguliwa!");
+                    speak("Hongera! Level mpya sasa ipo wazi!");
                     playSound('win');
                     showToast("✅ Level mpya imefunguliwa!", true);
                 } else {
@@ -670,7 +685,7 @@
             setTimeout(() => {
                 coins += 500;
                 updateUI();
-                speak("Asante! Umeongeza coins 500!");
+                speak("Asante sana! Umepata koini mia tano.");
                 playSound('coin');
                 showToast("✅ +500 Coins!", true);
             }, 5000);
@@ -682,7 +697,7 @@
             setTimeout(() => {
                 lives++;
                 updateUI();
-                speak("Hongera! Umeongeza life moja!");
+                speak("Hongera! Umeongeza maisha moja.");
                 playSound('win');
                 showToast("✅ +1 Life!", true);
             }, 5000);
@@ -696,7 +711,7 @@
                 updateUI();
                 document.getElementById('gameOverModal').style.display = 'none';
                 isPaused = false;
-                speak("Umefufuliwa! Endelea kucheza!");
+                speak("Sawa! Unaweza kuendelea kucheza sasa.");
                 playSound('win');
                 showToast("✅ Umefufuliwa! +200 Coins!", true);
                 initLevel(currentLevel);
@@ -711,7 +726,7 @@
                     currentLevel++;
                     if (currentLevel > MAX_LEVELS) currentLevel = MAX_LEVELS;
                     initLevel(currentLevel);
-                    speak(`Umeruka hadi Level ${currentLevel}!`);
+                    speak(`Sawa, tumeruka hadi level ya ${currentLevel}.`);
                     playSound('win');
                     showToast(`✅ Umeruka hadi Level ${currentLevel}!`, true);
                     closeAllPanels();
@@ -725,7 +740,7 @@
             setTimeout(() => {
                 coins += pendingWinAmount;
                 updateUI();
-                speak(`Umepata ${pendingWinAmount} coins za ziada!`);
+                speak(`Umepata kiasi cha koini ${pendingWinAmount} mara mbili!`);
                 playSound('coin');
                 showToast(`✅ +${pendingWinAmount} Coins!`, true);
                 document.getElementById('doubleModal').style.display = 'none';
@@ -762,7 +777,7 @@
             setTimeout(() => {
                 dailyAdsWatched++;
                 localStorage.setItem("dailyAdsWatched", dailyAdsWatched);
-                speak(`Tangazo ${dailyAdsWatched} kati ya 3 limekamilika`);
+                speak(`Umetazama tangazo la ${dailyAdsWatched} kati ya matatu`);
                 
                 let btn = document.getElementById('dailyBonusBtn');
                 if (btn) btn.innerText = `🎁 DAILY BONUS (${dailyAdsWatched}/3 ADS)`;
@@ -772,7 +787,7 @@
                     coins += megaBonus;
                     dailyBonusClaimed = true;
                     localStorage.setItem("dailyBonusClaimed", true);
-                    speak(`Hongera! Bonasi kubwa ya ${megaBonus} coins!`);
+                    speak(`Hongera sana! Umepata bonasi kubwa ya koini elfu tano!`);
                     playSound('win');
                     showToast(`🎉 UMEPATA ${megaBonus} COINS! 🎉`, true);
                     if (btn) btn.innerText = "✅ BONASI IMEPATIKANA LEO";
@@ -810,7 +825,7 @@
                         lastFreeLife = Date.now();
                         localStorage.setItem("lastFreeLife", lastFreeLife);
                         btn.remove();
-                        speak("Umepata life ya ziada!");
+                        speak("Nimekuongezea maisha moja ya bure!");
                         showToast("✅ +1 Life bure!", true);
                     }, 5000);
                 };
@@ -831,11 +846,11 @@
                 let reward = rewards[Math.floor(Math.random() * rewards.length)];
                 if (reward === "life") {
                     lives++;
-                    speak("Hongera! Umepata Life 1 ya ziada!");
+                    speak("Bahati nzuri! Umepata maisha ya ziada!");
                     showToast("❤️ +1 Life!", true);
                 } else {
                     coins += reward;
-                    speak(`Hongera! Umepata ${reward} coins!`);
+                    speak(`Vizuri sana! Umepata koini ${reward} kwenye sanduku.`);
                     showToast(`💰 +${reward} Coins!`, true);
                 }
                 updateUI();
@@ -855,7 +870,7 @@
             openAd();
             setTimeout(() => {
                 document.getElementById('spinModal').style.display = 'flex';
-                speak("Sasa unaweza kuzungusha gurudumu la bahati!");
+                speak("Gurudumu la bahati lipo wazi sasa, jaribu bahati yako!");
                 showToast("✅ Spin imefunguliwa!", true);
             }, 5000);
         }
@@ -887,12 +902,12 @@
                 
                 if (prize.value === "lives") {
                     lives += prize.amount;
-                    speak(`Hongera! Umepata ${prize.amount} Lives!`);
+                    speak(`Hongera! Umeshinda maisha ${prize.amount}!`);
                 } else if (prize.value > 0) {
                     coins += prize.value;
-                    speak(`Hongera! Umepata ${prize.value} Coins!`);
+                    speak(`Hongera sana! Umepata koini ${prize.value}!`);
                 } else {
-                    speak("Pole! Jaribu tena!");
+                    speak("Pole sana! Unaweza kujaribu tena wakati mwingine.");
                 }
                 
                 updateUI();
@@ -909,12 +924,10 @@
             // Cue ball (Mpira Mweupe)
             balls.push({x: 250, y: canvas.height/2, r: 16, color: 'white', dx: 0, dy: 0});
             
-            // Triangle formation for 15 Balls
             let startX = 650;
             let startY = canvas.height/2;
             let r = 16;
             
-            // Colors reflecting standard pool balls (solids and stripes) with black 8-ball
             let colors = ['#f1c40f', '#3498db', '#e74c3c', '#9b59b6', '#111', '#2ecc71', '#e67e22', '#7f8c8d', '#d35400', '#2980b9', '#c0392b', '#8e44ad', '#16a085', '#f39c12', '#2c3e50'];
             let colorIndex = 0;
 
@@ -956,7 +969,6 @@
             e.preventDefault();
             if (isPaused) return;
             let pos = getCanvasCoords(e);
-            // Must click near the white ball to start aiming
             if (balls[0] && Math.hypot(pos.x - balls[0].x, pos.y - balls[0].y) < 50) {
                 isDragging = true;
             }
@@ -975,7 +987,7 @@
         function handleEnd(e) {
             e.preventDefault();
             if (!isDragging || isPaused || !balls[0]) return;
-            let dx = (balls[0].x - mouseX) * 0.18; // Nguvu halisi ya pigo
+            let dx = (balls[0].x - mouseX) * 0.18;
             let dy = (balls[0].y - mouseY) * 0.18;
             balls[0].dx = dx;
             balls[0].dy = dy;
@@ -1003,7 +1015,7 @@
                 if (gamesSinceLastAd >= 5) {
                     gamesSinceLastAd = 0;
                     openAd();
-                    speak("Asante kwa mechi 5! Tangazo moja itasaidia!");
+                    speak("Umecheza vizuri sana! Tazama tangazo hili dogo kisha tuendelee.");
                 }
                 
                 matchesForChest++;
@@ -1028,7 +1040,7 @@
                 isPaused = true;
                 
                 initLevel(currentMode === 'quest' ? currentLevel : 1);
-                speak("Hongera! Umeshinda mechi!");
+                speak("Hongera sana! Umeshinda mechi hii kwa ustadi.");
                 updateUI();
             }
         }
@@ -1038,19 +1050,19 @@
                 document.getElementById('gameOverText').innerHTML = `Ulifika Level ${currentLevel}<br>💰 Coins: ${coins}`;
                 document.getElementById('gameOverModal').style.display = 'flex';
                 isPaused = true;
+                speak("Mchezo umeisha! Lakini usijali, unaweza kufufuka kwa kutazama tangazo.");
             }
         }
         
         function draw() {
             if (!ctx) return;
-            // Clear
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // Draw Table Background
             ctx.fillStyle = tableColor;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Draw Inner Table Shadow (Cushions)
+            // Draw Inner Table Shadow
             ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
             ctx.shadowBlur = 20;
             ctx.shadowOffsetX = 0;
@@ -1073,29 +1085,41 @@
                 ctx.fill();
             });
             
-            // Aiming Line & Cue Stick (Fimbo Halisi)
+            // =======================================================
+            // MSTARI BORA WA KULENGA (LASER AIM & TARGET CIRCLE)
+            // =======================================================
             if (isDragging && !isPaused && balls[0]) {
                 let pdx = balls[0].x - mouseX;
                 let pdy = balls[0].y - mouseY;
                 let angle = Math.atan2(pdy, pdx);
                 let powerDist = Math.min(Math.hypot(pdx, pdy), 200);
                 
-                // Mstari wa Kulenga (Dotted Aiming Line)
+                // Mstari mrefu wa kulenga unaoenda mbele (Kama mtu amelenga shimo)
                 ctx.save();
                 ctx.beginPath();
-                ctx.setLineDash([5, 10]);
+                ctx.setLineDash([8, 8]); // Nukta zinazoonekana vizuri
                 ctx.moveTo(balls[0].x, balls[0].y);
-                let aimLength = 1000;
-                ctx.lineTo(balls[0].x + Math.cos(angle) * aimLength, balls[0].y + Math.sin(angle) * aimLength);
-                ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
+                let aimLength = 1200; // Mstari mrefu kufika mpaka ukingoni
+                let targetX = balls[0].x + Math.cos(angle) * aimLength;
+                let targetY = balls[0].y + Math.sin(angle) * aimLength;
+                
+                ctx.lineTo(targetX, targetY);
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+                
+                // Kiduara cha Shabaha (Target Reticle)
+                ctx.beginPath();
+                ctx.arc(balls[0].x + Math.cos(angle) * 100, balls[0].y + Math.sin(angle) * 100, 16, 0, Math.PI*2);
+                ctx.strokeStyle = "rgba(241, 196, 15, 0.7)"; // Rangi ya Dhahabu
+                ctx.setLineDash([]); // Kiduara kimenyooka
                 ctx.lineWidth = 2;
                 ctx.stroke();
                 ctx.restore();
 
-                // Fimbo ya Pool (Cue Stick) inavutwa nyuma
+                // Fimbo ya Pool (Cue Stick)
                 ctx.save();
                 ctx.translate(balls[0].x, balls[0].y);
-                // Angle inaelekea kwa mouse (kuvuta fimbo nyuma)
                 ctx.rotate(angle + Math.PI); 
                 
                 // Ncha ya fimbo (Blue tip)
@@ -1120,117 +1144,33 @@
                 ctx.shadowOffsetY = 3;
 
                 let gradient = ctx.createRadialGradient(ball.x - ball.r/3, ball.y - ball.r/3, ball.r/8, ball.x, ball.y, ball.r);
-                gradient.addColorStop(0, '#ffffff'); // Highlight point
+                gradient.addColorStop(0, '#ffffff');
                 gradient.addColorStop(0.3, ball.color === 'white' ? '#f5f5f5' : ball.color); 
-                gradient.addColorStop(1, '#000000'); // Dark edge
+                gradient.addColorStop(1, '#000000');
 
                 ctx.fillStyle = gradient;
                 ctx.beginPath();
                 ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
                 ctx.fill();
                 
-                ctx.shadowColor = "transparent"; // Reset
+                ctx.shadowColor = "transparent";
             });
             
-            // Physics Engine (Uhalisia wa Msuguano)
+            // Physics Engine
             if (!isPaused) {
                 balls.forEach((ball, i) => {
                     ball.x += ball.dx;
                     ball.y += ball.dy;
                     
-                    // Friction Halisi
                     ball.dx *= 0.99;
                     ball.dy *= 0.99;
                     
-                    // Smooth Stop (Izuie isizunguke milele taratibu sana)
                     if (Math.abs(ball.dx) < 0.02) ball.dx = 0;
                     if (Math.abs(ball.dy) < 0.02) ball.dy = 0;
                     
-                    // Bouncing kwenye matakia (Cushions)
                     if (ball.x - ball.r < 0) { ball.x = ball.r; ball.dx *= -0.85; }
                     if (ball.x + ball.r > canvas.width) { ball.x = canvas.width - ball.r; ball.dx *= -0.85; }
                     if (ball.y - ball.r < 0) { ball.y = ball.r; ball.dy *= -0.85; }
                     if (ball.y + ball.r > canvas.height) { ball.y = canvas.height - ball.r; ball.dy *= -0.85; }
                     
-                    // Pockets (Kutumbukia)
                     for (let p of pockets) {
-                        if (Math.hypot(ball.x - p[0], ball.y - p[1]) < 36) {
-                            if (ball.color === 'white') {
-                                ball.x = 250;
-                                ball.y = canvas.height/2;
-                                ball.dx = 0; ball.dy = 0;
-                                lives--;
-                                updateUI();
-                                playSound('hit');
-                                speak("Faulo! Life imepungua!");
-                                checkGameOver();
-                            } else {
-                                balls.splice(i, 1);
-                                coins += 50;
-                                updateUI();
-                                playSound('coin');
-                                checkWin();
-                            }
-                            break;
-                        }
-                    }
-                    
-                    // Kugongana kwa Mipira (Ball to ball collision)
-                    for (let j = i+1; j < balls.length; j++) {
-                        let b2 = balls[j];
-                        let dx = b2.x - ball.x;
-                        let dy = b2.y - ball.y;
-                        let dist = Math.hypot(dx, dy);
-                        
-                        if (dist < ball.r + b2.r) {
-                            let angle = Math.atan2(dy, dx);
-                            let overlap = (ball.r + b2.r - dist) / 2;
-                            
-                            // Tenganisha mipira iliyopishana
-                            ball.x -= Math.cos(angle) * overlap;
-                            ball.y -= Math.sin(angle) * overlap;
-                            b2.x += Math.cos(angle) * overlap;
-                            b2.y += Math.sin(angle) * overlap;
-                            
-                            // Hesabu nguvu ya kugongana
-                            let v1 = {x: ball.dx, y: ball.dy};
-                            let v2 = {x: b2.dx, y: b2.dy};
-                            let nx = dx / dist;
-                            let ny = dy / dist;
-                            let vrelx = v1.x - v2.x;
-                            let vrely = v1.y - v2.y;
-                            let dot = vrelx * nx + vrely * ny;
-                            
-                            if (dot < 0) {
-                                let e = 0.95; // Restitution (Nguvu ya kutanuka)
-                                let imp = (1 + e) * dot / 2;
-                                ball.dx -= imp * nx;
-                                ball.dy -= imp * ny;
-                                b2.dx += imp * nx;
-                                b2.dy += imp * ny;
-                                playSound('hit');
-                            }
-                        }
-                    }
-                });
-            }
-            
-            requestAnimationFrame(draw);
-        }
-        
-        function init() {
-            if (localStorage.getItem("playerName")) {
-                document.getElementById('welcomeScreen').style.display = 'none';
-                document.getElementById('gameMenu').style.display = 'flex';
-                resetDailyBonus();
-                setInterval(checkFreeLifeOffer, 60000);
-            }
-            initLevel(1);
-            updateUI();
-            draw();
-        }
-        
-        init();
-    </script>
-</body>
-</html>
